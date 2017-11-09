@@ -15,6 +15,7 @@ import com.google.android.gms.common.api.GoogleApiClient
 import com.google.android.gms.location.LocationListener
 import com.google.android.gms.location.LocationRequest
 import com.google.android.gms.location.LocationServices
+import android.content.Context
 
 
 class MapsActivity : AppCompatActivity(), OnMapReadyCallback,
@@ -23,12 +24,14 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback,
         LocationListener{
 
     private lateinit var mMap: GoogleMap
+    private var filename = "map5.kml"
     private lateinit var mGoogleApiClient: GoogleApiClient
     val permissionsRequestAccessFineLocation = 1
     var mLocationPermissionGranted = false
     // getLastLocation can return null, so we need the type ”Location?”
     private var mLastLocation : android.location.Location? = null
     val tag = "MapsActivity"
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -63,6 +66,9 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback,
         mMap.addMarker(MarkerOptions().position(FHill).title("FHill"))
         mMap.moveCamera(CameraUpdateFactory.newLatLng(FHill))
 
+
+
+
         try {  // Visualise current position with a small blue circle
             mMap.isMyLocationEnabled = true
         } catch (se : SecurityException) {
@@ -72,8 +78,12 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback,
             mMap.uiSettings.isMyLocationButtonEnabled = true
     }
 
-    override fun onStart() { super.onStart()
-        mGoogleApiClient.connect() }
+    override fun onStart() {
+        super.onStart()
+        //val path = this.filesDir.toString()
+
+        mGoogleApiClient.connect()
+    }
     override fun onStop() { super.onStop()
         if (mGoogleApiClient.isConnected) { mGoogleApiClient.disconnect()
         } }

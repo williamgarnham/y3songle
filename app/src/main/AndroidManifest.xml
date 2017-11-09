@@ -30,7 +30,7 @@
             android:value="AIzaSyCdvTEaheFAH7VqQ8qARNWRe7NBzPXLfro" />
 
         <activity
-            android:name=".MainActivity"
+            android:name=".MapsActivity"
             android:label="Songle"
             android:theme="@style/AppTheme.NoActionBar">
             <intent-filter>
@@ -42,12 +42,14 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".MapsActivity"
+            android:name=".MainActivity"
             android:label="Songle" />
         <activity
             android:name=".CompletedSongs"
-            android:label="@string/title_activity_completed_songs"
-            android:theme="@style/AppTheme.NoActionBar"></activity>
+            android:label="Songle"
+            android:theme="@style/AppTheme.NoActionBar">
+
+        </activity>
     </application>
 
 </manifest>

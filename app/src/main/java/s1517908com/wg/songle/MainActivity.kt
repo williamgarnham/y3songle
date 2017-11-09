@@ -5,6 +5,9 @@ import android.support.design.widget.Snackbar
 import android.support.v7.app.AppCompatActivity
 
 import kotlinx.android.synthetic.main.activity_main.*
+import android.content.Intent
+
+
 
 class MainActivity : AppCompatActivity() {
 
@@ -17,7 +20,17 @@ class MainActivity : AppCompatActivity() {
         /*fab.setOnClickListener { view ->
             Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
                     .setAction("Action", null).show()
-        }*/
+        }
+
+
+        kotlinx.android.synthetic.main.activity_main.button8.setOnClickListener {
+            val intent = Intent(this, CompletedSongs::class.java)
+            startActivity(intent)
+        }
+        */
     }
 
+
 }
+
+
