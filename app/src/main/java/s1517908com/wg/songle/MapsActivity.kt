@@ -17,23 +17,47 @@ import com.google.android.gms.location.LocationRequest
 import com.google.android.gms.location.LocationServices
 import android.content.Context
 
+import android.content.IntentFilter
+import android.content.Intent
+import android.content.BroadcastReceiver
+import android.net.ConnectivityManager
+//import android.webkit.DownloadListener
+import java.io.*
+import java.net.URL
+import com.google.maps.android.kml.KmlLayer
+
+import android.os.AsyncTask
+
 
 class MapsActivity : AppCompatActivity(), OnMapReadyCallback,
         GoogleApiClient.ConnectionCallbacks,
         GoogleApiClient.OnConnectionFailedListener,
-        LocationListener{
+        LocationListener, DownloadListener {
+
 
     private lateinit var mMap: GoogleMap
-    private var filename = "map5.kml"
+    //var filename = "testMap.kml"
+    private var receiver = NetworkReceiver()
+
+    var kmllayer: KmlLayer? = null
+
     private lateinit var mGoogleApiClient: GoogleApiClient
     val permissionsRequestAccessFineLocation = 1
     var mLocationPermissionGranted = false
     // getLastLocation can return null, so we need the type ”Location?”
-    private var mLastLocation : android.location.Location? = null
+    private var mLastLocation: android.location.Location? = null
     val tag = "MapsActivity"
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
+        val intent = intent
+        val URL = "http://www.inf.ed.ac.uk/teaching/courses/cslp/data/songs/01/map1.kml"
+        val kmldownloader = DownloadKml(this,this)
+        kmldownloader.execute(URL)
+
+
+
+
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_maps)
         // Obtain the SupportMapFragment and get notified when the map is ready to be used.
@@ -47,6 +71,17 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback,
                 .addOnConnectionFailedListener(this)
                 .addApi(LocationServices.API)
                 .build()
+
+        val filter = IntentFilter(ConnectivityManager.CONNECTIVITY_ACTION)
+        registerReceiver(receiver, filter)
+
+    }
+
+
+    var stream : InputStream? = null
+    override fun downloadComp(str : String){
+        var kstream = str.byteInputStream()
+        stream = kstream
     }
 
     /**
@@ -61,32 +96,36 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback,
     override fun onMapReady(googleMap: GoogleMap) {
         mMap = googleMap
 
+        kmllayer = KmlLayer(mMap, stream, this)
+        kmllayer!!.addLayerToMap()
+
         // Add a marker in Sydney and move the camera
-        val FHill = LatLng(55.946233, -3.192473)
-        mMap.addMarker(MarkerOptions().position(FHill).title("FHill"))
-        mMap.moveCamera(CameraUpdateFactory.newLatLng(FHill))
-
-
+        //val FHill = LatLng(55.946233, -3.192473)
+        //mMap.addMarker(MarkerOptions().position(FHill).title("FHill"))
+        //mMap.moveCamera(CameraUpdateFactory.newLatLng(FHill))
 
 
         try {  // Visualise current position with a small blue circle
             mMap.isMyLocationEnabled = true
-        } catch (se : SecurityException) {
+        } catch (se: SecurityException) {
             println("Security exception thrown [onMapReady]")
         }
-            // Add ”My location” button to the user interface
-            mMap.uiSettings.isMyLocationButtonEnabled = true
+        // Add ”My location” button to the user interface
+        mMap.uiSettings.isMyLocationButtonEnabled = true
     }
 
     override fun onStart() {
         super.onStart()
-        //val path = this.filesDir.toString()
 
         mGoogleApiClient.connect()
     }
-    override fun onStop() { super.onStop()
-        if (mGoogleApiClient.isConnected) { mGoogleApiClient.disconnect()
-        } }
+
+    override fun onStop() {
+        super.onStop()
+        if (mGoogleApiClient.isConnected) {
+            mGoogleApiClient.disconnect()
+        }
+    }
 
     fun createLocationRequest() {
         // Set the parameters for the location request
@@ -104,11 +143,12 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback,
         }
     }
 
-    override fun onConnected(connectionHint : Bundle?) {
+    override fun onConnected(connectionHint: Bundle?) {
         try {
-        createLocationRequest()
-        }   catch (ise : IllegalStateException) {
-        println("[$tag] [onConnected] IllegalStateException thrown") }
+            createLocationRequest()
+        } catch (ise: IllegalStateException) {
+            println("[$tag] [onConnected] IllegalStateException thrown")
+        }
         // Can we access the user’s current location?
         if (android.support.v4.content.ContextCompat.checkSelfPermission(this, android.Manifest.permission.ACCESS_FINE_LOCATION) == android.content.pm.PackageManager.PERMISSION_GRANTED) {
             val api = LocationServices.FusedLocationApi
@@ -116,31 +156,116 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback,
             // Caution: getLastLocation can return null
             if (mLastLocation == null) {
                 println("[$tag] Warning: mLastLocation is null")
-            } }
-        else {
+            }
+        } else {
             android.support.v4.app.ActivityCompat.requestPermissions(this,
                     arrayOf(android.Manifest.permission.ACCESS_FINE_LOCATION),
                     permissionsRequestAccessFineLocation)
-        } }
-    override fun onLocationChanged(current : android.location.Location?) {
+        }
+    }
+
+    override fun onLocationChanged(current: android.location.Location?) {
         if (current == null) {
-            println("[$tag] [onLocationChanged] Location unknown") }
-        else {
+            println("[$tag] [onLocationChanged] Location unknown")
+        } else {
             println("""[$tag] [onLocationChanged] Lat/long now
              (${current.latitude},
             ${current.longitude})"""
             )
-        // Do something with current location
+            // Do something with current location
 
-    } }
+        }
+    }
 
-    override fun onConnectionSuspended(flag : Int) {
+    override fun onConnectionSuspended(flag: Int) {
         println(" >>>> onConnectionSuspended")
     }
-    override fun onConnectionFailed(result : ConnectionResult) {
-    // An unresolvable error has occurred and a connection to Google APIs // could not be established. Display an error message, or handle
-    // the failure silently
+
+    override fun onConnectionFailed(result: ConnectionResult) {
+        // An unresolvable error has occurred and a connection to Google APIs // could not be established. Display an error message, or handle
+        // the failure silently
         println(" >>>> onConnectionFailed")
     }
+
+
+
+
+    private inner class NetworkReceiver : BroadcastReceiver() {
+        override fun onReceive(context: Context, intent: Intent) {
+            val connMgr =
+                    context.getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
+            val networkInfo = connMgr.activeNetworkInfo
+            val networkPref = "wifi"
+            if (networkPref == "wifi" &&
+                    networkInfo?.type == ConnectivityManager.TYPE_WIFI) { // Wi ́Fi is connected, so use Wi ́Fi
+            } else if (networkInfo != null) {
+                // Have a network connection and permission, so use data
+            }
+
+        }
+
+    }
+
+
+
+
+}
+
+interface DownloadListener {
+    fun downloadComp(result: String)
+
+}
+
+
+class DownloadKml (val caller: DownloadListener, val context: Context) : AsyncTask<String, Void, String>() {
+
+
+    val tag = "DownloadKml"
+    var cont = context
+    //var sng = song
+    //var mp = map
+    //var filename = "Song ${sng}, map ${mp}"
+
+    //var file = File(cont.getFilesDir(), filename)
+
+    override fun doInBackground(vararg f_url: String): String?{
+        val fileString = StringBuilder()
+
+        try{
+            val url = URL(f_url[0])
+            val input = BufferedReader(InputStreamReader(url.openStream()))
+
+            var line: String? = input.readLine()
+            while(line != null){
+                fileString.append(line)
+                line = input.readLine()
+            }
+
+        }catch(e:Exception){
+
+        }
+
+        val outputStream : FileOutputStream
+
+        try{
+            //outputStream = cont.openFileOutput(filename, Context.MODE_PRIVATE)
+            //outputStream.write(fileString.toString().toByteArray())
+            //outputStream.close()
+        }catch(e:Exception){
+
+        }
+        return fileString.toString()
+    }
+
+
+    override fun onPostExecute(result: String?) {
+        if(result != null){
+            caller.downloadComp(result)
+        }
+    }
+
+
+
+
 
 }
