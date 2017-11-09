@@ -28,6 +28,10 @@ import com.google.maps.android.kml.KmlLayer
 
 import android.os.AsyncTask
 
+import android.widget.Toast
+import android.widget.Button
+import kotlinx.android.synthetic.main.activity_maps.*
+import android.support.design.widget.Snackbar
 
 class MapsActivity : AppCompatActivity(), OnMapReadyCallback,
         GoogleApiClient.ConnectionCallbacks,
@@ -74,6 +78,11 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback,
 
         val filter = IntentFilter(ConnectivityManager.CONNECTIVITY_ACTION)
         registerReceiver(receiver, filter)
+
+        guessSongButton.setOnClickListener { view ->
+            Toast.makeText(this, "Incorrect!",
+                    Toast.LENGTH_LONG).show()
+        }
 
     }
 

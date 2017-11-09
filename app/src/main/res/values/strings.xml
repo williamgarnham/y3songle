@@ -3,4 +3,22 @@
     <string name="title_activity_maps">Map</string>
     <string name="title_activity_main">MainActivity</string>
     <string name="title_activity_completed_songs">CompletedSongs</string>
+    <string name="title_activity_collected_words">CollectedWords</string>
+    <string name="bohe"> 	Is this the real life?\n
+     	Is this just fantasy?\n
+     	[Blank] in a landslide,\n
+     	No escape from reality.\n\n
+
+     	[Blank] your eyes,\n
+     	Look up to the [Blank] and see,\n
+     	Im just a poor boy, I need no [Blank],\n
+     	[Blank] Im easy come, easy go,\n
+    	Little high, little low,\n
+    	Any way the wind blows doesnt really matter to me, to me.\n\n
+
+    	Mama, just killed a man,\n
+    	Put a gun against his head,\n
+    	Pulled my trigger, now hes dead.\n
+    </string>
+    <string name="title_activity_auto_complete_page">AutoCompletePage</string>
 </resources>

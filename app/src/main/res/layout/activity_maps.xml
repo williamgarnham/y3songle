@@ -19,7 +19,7 @@
         android:text="View Words" />
 
     <Button
-        android:id="@+id/button12"
+        android:id="@+id/guessSongButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentStart="true"
@@ -28,12 +28,14 @@
         android:padding="10dp"
         android:text="Guess Song" />
 
+
+
     <Button
         android:id="@+id/button13"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentStart="true"
-        android:layout_below="@+id/button12"
+        android:layout_below="@+id/guessSongButton"
         android:layout_marginTop="9dp"
         android:text="Free Word" />
 
@@ -45,5 +47,45 @@
         android:layout_below="@+id/button13"
         android:layout_marginTop="11dp"
         android:text="Autocomplete" />
+
+    <android.support.design.widget.FloatingActionButton
+        android:id="@+id/floatingActionButton3"
+        android:layout_width="40dp"
+        android:layout_height="40dp"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentStart="true"
+        android:layout_marginBottom="14dp"
+        android:layout_marginStart="10dp"
+        android:clickable="true"
+        app:backgroundTint="@color/colorPrimary"
+        app:srcCompat="@color/colorPrimary" />
+
+    <TextView
+        android:layout_width="20dp"
+        android:layout_height="23dp"
+        android:layout_alignStart="@+id/floatingActionButton3"
+        android:layout_alignTop="@+id/floatingActionButton3"
+        android:layout_gravity="center"
+        android:layout_marginStart="9dp"
+        android:layout_marginTop="8dp"
+        android:elevation="16dp"
+        android:text="15"
+        android:textAppearance="?android:attr/textAppearanceMedium"
+        android:textColor="@color/TextForGreen" />
+
+    <EditText
+        android:id="@+id/editText"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignBaseline="@+id/guessSongButton"
+        android:layout_alignBottom="@+id/guessSongButton"
+        android:layout_toEndOf="@+id/button15"
+        android:background="@color/colorPrimary"
+        android:ems="10"
+        android:inputType="textPersonName"
+        android:text="Guess Song"
+        android:textAlignment="center"
+        android:textColor="@color/TextForGreen"
+        android:textStyle="bold" />
 
 </RelativeLayout>
