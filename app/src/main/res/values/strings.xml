@@ -21,4 +21,5 @@
     	Pulled my trigger, now hes dead.\n
     </string>
     <string name="title_activity_auto_complete_page">AutoCompletePage</string>
+    <string name="title_activity_correct_guess">CorrectGuess</string>
 </resources>

@@ -32,7 +32,7 @@
             android:value="AIzaSyCdvTEaheFAH7VqQ8qARNWRe7NBzPXLfro" />
 
         <activity
-            android:name=".AutoCompletePage"
+            android:name=".CorrectGuess"
             android:label="Songle"
             android:theme="@style/AppTheme.NoActionBar">
             <intent-filter>
@@ -56,6 +56,10 @@
             android:theme="@style/AppTheme.NoActionBar" />
         <activity
             android:name=".CollectedWords"
+            android:label="Songle"
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity
+            android:name=".AutoCompletePage"
             android:label="Songle"
             android:theme="@style/AppTheme.NoActionBar"/>
     </application>
