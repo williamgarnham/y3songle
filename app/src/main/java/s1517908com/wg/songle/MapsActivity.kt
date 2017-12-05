@@ -20,6 +20,7 @@ import android.content.Context
 import android.content.IntentFilter
 import android.content.Intent
 import android.content.BroadcastReceiver
+import android.content.res.Resources
 import android.net.ConnectivityManager
 //import android.webkit.DownloadListener
 import java.io.*
@@ -32,6 +33,7 @@ import android.widget.Toast
 import android.widget.Button
 import kotlinx.android.synthetic.main.activity_maps.*
 import android.support.design.widget.Snackbar
+import android.util.Log
 import android.view.View
 
 class MapsActivity : AppCompatActivity(), OnMapReadyCallback,
@@ -52,7 +54,6 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback,
     // getLastLocation can return null, so we need the type ”Location?”
     private var mLastLocation: android.location.Location? = null
     val tag = "MapsActivity"
-
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -82,6 +83,16 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback,
         registerReceiver(receiver, filter)
 
 
+
+        val res :Resources = getResources()
+        val pointsIS: InputStream  = res.openRawResource(R.raw.pointsnumber)
+        val bufferedReaderTXT: BufferedReader = BufferedReader(InputStreamReader(pointsIS))
+        val points:String = bufferedReaderTXT.readText()
+
+
+
+        pointsText.text = points
+
         guessText.visibility = View.INVISIBLE
         guessSongButton.setOnClickListener { view ->
             Toast.makeText(this, "Incorrect!",
@@ -97,6 +108,7 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback,
 
         freeWordB.setOnClickListener { view ->
             //get free word
+            //subtract points
         }
 
         viewWordsB.setOnClickListener { view ->

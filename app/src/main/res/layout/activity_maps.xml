@@ -49,7 +49,7 @@
         android:text="Autocomplete" />
 
     <android.support.design.widget.FloatingActionButton
-        android:id="@+id/floatingActionButton3"
+        android:id="@+id/pointsButton"
         android:layout_width="40dp"
         android:layout_height="40dp"
         android:layout_alignParentBottom="true"
@@ -61,10 +61,11 @@
         app:srcCompat="@color/colorPrimary" />
 
     <TextView
+        android:id="@+id/pointsText"
         android:layout_width="20dp"
         android:layout_height="23dp"
-        android:layout_alignStart="@+id/floatingActionButton3"
-        android:layout_alignTop="@+id/floatingActionButton3"
+        android:layout_alignStart="@+id/pointsButton"
+        android:layout_alignTop="@+id/pointsButton"
         android:layout_gravity="center"
         android:layout_marginStart="9dp"
         android:layout_marginTop="8dp"

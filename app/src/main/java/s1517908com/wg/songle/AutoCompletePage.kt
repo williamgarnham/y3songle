@@ -22,6 +22,7 @@ class AutoCompletePage : AppCompatActivity() {
 
         yesB.setOnClickListener { view ->
             //add to completed page
+            //subtract points
 
             val intent = Intent(this, MainActivity::class.java)
             intent.addFlags(Intent.FLAG_ACTIVITY_NO_HISTORY)
