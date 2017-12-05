@@ -32,6 +32,7 @@ import android.widget.Toast
 import android.widget.Button
 import kotlinx.android.synthetic.main.activity_maps.*
 import android.support.design.widget.Snackbar
+import android.view.View
 
 class MapsActivity : AppCompatActivity(), OnMapReadyCallback,
         GoogleApiClient.ConnectionCallbacks,
@@ -79,10 +80,34 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback,
         val filter = IntentFilter(ConnectivityManager.CONNECTIVITY_ACTION)
         registerReceiver(receiver, filter)
 
+
+        guessText.visibility = View.INVISIBLE
         guessSongButton.setOnClickListener { view ->
             Toast.makeText(this, "Incorrect!",
                     Toast.LENGTH_LONG).show()
+
+            if(guessText.visibility == View.VISIBLE){
+                guessText.visibility = View.INVISIBLE
+            }else{
+                guessText.visibility = View.VISIBLE
+            }
+
         }
+
+        freeWordB.setOnClickListener { view ->
+            //get free word
+        }
+
+        viewWordsB.setOnClickListener { view ->
+            val intent = Intent(this, CollectedWords::class.java)
+            startActivity(intent)
+        }
+
+        autoCompleteB.setOnClickListener { view ->
+            val intent = Intent(this, AutoCompletePage::class.java)
+            startActivity(intent)
+        }
+
 
     }
 

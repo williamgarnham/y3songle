@@ -12,7 +12,7 @@
     tools:context="s1517908com.wg.songle.MapsActivity" />
 
     <Button
-        android:id="@+id/button10"
+        android:id="@+id/viewWordsB"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:padding="10dp"
@@ -23,7 +23,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentStart="true"
-        android:layout_below="@+id/button10"
+        android:layout_below="@+id/viewWordsB"
         android:layout_marginTop="8dp"
         android:padding="10dp"
         android:text="Guess Song" />
@@ -31,7 +31,7 @@
 
 
     <Button
-        android:id="@+id/button13"
+        android:id="@+id/freeWordB"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentStart="true"
@@ -40,11 +40,11 @@
         android:text="Free Word" />
 
     <Button
-        android:id="@+id/button15"
+        android:id="@+id/autoCompleteB"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentStart="true"
-        android:layout_below="@+id/button13"
+        android:layout_below="@+id/freeWordB"
         android:layout_marginTop="11dp"
         android:text="Autocomplete" />
 
@@ -74,12 +74,12 @@
         android:textColor="@color/TextForGreen" />
 
     <EditText
-        android:id="@+id/editText"
+        android:id="@+id/guessText"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignBaseline="@+id/guessSongButton"
         android:layout_alignBottom="@+id/guessSongButton"
-        android:layout_toEndOf="@+id/button15"
+        android:layout_toEndOf="@+id/autoCompleteB"
         android:background="@color/colorPrimary"
         android:ems="10"
         android:inputType="textPersonName"

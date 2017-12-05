@@ -25,31 +25,31 @@ class MainActivity : AppCompatActivity() {
 
         completedSongs.setOnClickListener { view ->
             val intent = Intent(this, CompletedSongs::class.java)
-            startActivity(intent);
+            startActivity(intent)
         }
         contButton.setOnClickListener { view ->
             val intent = Intent(this, MapsActivity::class.java)
-            startActivity(intent);
+            startActivity(intent)
         }
         easyButton.setOnClickListener { view ->
             val intent = Intent(this, MapsActivity::class.java)
-            startActivity(intent);
+            startActivity(intent)
         }
         interButton.setOnClickListener { view ->
             val intent = Intent(this, MapsActivity::class.java)
-            startActivity(intent);
+            startActivity(intent)
         }
         hardButton.setOnClickListener { view ->
             val intent = Intent(this, MapsActivity::class.java)
-            startActivity(intent);
+            startActivity(intent)
         }
         expertButton.setOnClickListener { view ->
             val intent = Intent(this, MapsActivity::class.java)
-            startActivity(intent);
+            startActivity(intent)
         }
         legendaryButton.setOnClickListener { view ->
             val intent = Intent(this, MapsActivity::class.java)
-            startActivity(intent);
+            startActivity(intent)
         }
 
     }

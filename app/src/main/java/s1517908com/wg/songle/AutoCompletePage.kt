@@ -7,6 +7,8 @@ import android.support.v7.app.AppCompatActivity
 import kotlinx.android.synthetic.main.activity_auto_complete_page.*
 
 import android.view.View
+import kotlinx.android.synthetic.main.content_auto_complete_page.*
+import android.content.Intent
 
 
 class AutoCompletePage : AppCompatActivity() {
@@ -21,6 +23,11 @@ class AutoCompletePage : AppCompatActivity() {
         fab.setOnClickListener { view ->
             Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
                     .setAction("Action", null).show()
+        }
+
+        yesB.setOnClickListener { view ->
+            val intent = Intent(this, MainActivity::class.java)
+            startActivity(intent)
         }
     }
 
