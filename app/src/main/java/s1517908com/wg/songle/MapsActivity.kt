@@ -112,7 +112,9 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback,
 
     }
 
-    override fun onBackPressed() {}
+    override fun onBackPressed() {
+        //prevent back button working
+    }
 
 
     var stream : InputStream? = null
