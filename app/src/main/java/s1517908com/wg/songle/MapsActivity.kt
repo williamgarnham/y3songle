@@ -55,6 +55,52 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback,
     private var mLastLocation: android.location.Location? = null
     val tag = "MapsActivity"
 
+    var points :String = ""
+
+    fun readTxtFile() {
+        //val res :Resources = getResources()
+        //val pointsIS: InputStream  = res.openRawResource(R.raw.pointsnumber)
+        //val bufferedReaderTXT: BufferedReader = BufferedReader(InputStreamReader(pointsIS))
+        //points = bufferedReaderTXT.readText()
+
+        val fis : FileInputStream= openFileInput("hello.txt")
+        val isr = InputStreamReader(fis)
+        val bufferedReaderTxt = BufferedReader(isr)
+        points = bufferedReaderTxt.readText()
+
+    }
+
+    fun writeTxtFile() {
+        //File("pointsnum.txt").bufferedWriter().use { out -> out.write(points) }
+
+        val filename = "pointsnum.txt"
+        val outputStream: FileOutputStream
+
+        try {
+            outputStream = openFileOutput(filename, Context.MODE_PRIVATE)
+            outputStream.write(points.toByteArray())
+            outputStream.close()
+        } catch (e: Exception) {
+            e.printStackTrace()
+        }
+
+    }
+
+    fun createPointsTxtFile(){
+        val filename = "pointsnum.txt"
+        points = "10"
+        val outputStream: FileOutputStream
+
+        try {
+            outputStream = openFileOutput(filename, Context.MODE_PRIVATE)
+            outputStream.write(points.toByteArray())
+            outputStream.close()
+        } catch (e: Exception) {
+            e.printStackTrace()
+        }
+
+    }
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         val intent = intent
@@ -83,13 +129,14 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback,
         registerReceiver(receiver, filter)
 
 
+        val pointsFile : File = getBaseContext().getFileStreamPath("pointsnum")
+        val pointsFileExists : Boolean = pointsFile.exists()
 
-        val res :Resources = getResources()
-        val pointsIS: InputStream  = res.openRawResource(R.raw.pointsnumber)
-        val bufferedReaderTXT: BufferedReader = BufferedReader(InputStreamReader(pointsIS))
-        val points:String = bufferedReaderTXT.readText()
-
-
+        if(pointsFileExists){
+            readTxtFile()
+        }else{
+            createPointsTxtFile()
+        }
 
         pointsText.text = points
 
@@ -109,6 +156,11 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback,
         freeWordB.setOnClickListener { view ->
             //get free word
             //subtract points
+            if(points.toInt() > 1) {
+                points = Integer.toString(points.toInt() - 2)
+                pointsText.text = points
+                writeTxtFile()
+            }
         }
 
         viewWordsB.setOnClickListener { view ->
