@@ -18,15 +18,13 @@ class AutoCompletePage : AppCompatActivity() {
         setContentView(R.layout.activity_auto_complete_page)
         setSupportActionBar(toolbar)
 
-        fab.setVisibility(View.GONE)
 
-        fab.setOnClickListener { view ->
-            Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-                    .setAction("Action", null).show()
-        }
 
         yesB.setOnClickListener { view ->
+            //add to completed page
+
             val intent = Intent(this, MainActivity::class.java)
+            intent.addFlags(Intent.FLAG_ACTIVITY_NO_HISTORY)
             startActivity(intent)
         }
     }

@@ -54,6 +54,7 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback,
     val tag = "MapsActivity"
 
 
+
     override fun onCreate(savedInstanceState: Bundle?) {
         val intent = intent
         val URL = "http://www.inf.ed.ac.uk/teaching/courses/cslp/data/songs/01/map1.kml"

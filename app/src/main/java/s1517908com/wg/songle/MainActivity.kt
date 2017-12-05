@@ -29,26 +29,32 @@ class MainActivity : AppCompatActivity() {
         }
         contButton.setOnClickListener { view ->
             val intent = Intent(this, MapsActivity::class.java)
+            intent.addFlags(Intent.FLAG_ACTIVITY_NO_HISTORY)
             startActivity(intent)
         }
         easyButton.setOnClickListener { view ->
             val intent = Intent(this, MapsActivity::class.java)
+            intent.addFlags(Intent.FLAG_ACTIVITY_NO_HISTORY)
             startActivity(intent)
         }
         interButton.setOnClickListener { view ->
             val intent = Intent(this, MapsActivity::class.java)
+            intent.addFlags(Intent.FLAG_ACTIVITY_NO_HISTORY)
             startActivity(intent)
         }
         hardButton.setOnClickListener { view ->
             val intent = Intent(this, MapsActivity::class.java)
+            intent.addFlags(Intent.FLAG_ACTIVITY_NO_HISTORY)
             startActivity(intent)
         }
         expertButton.setOnClickListener { view ->
             val intent = Intent(this, MapsActivity::class.java)
+            intent.addFlags(Intent.FLAG_ACTIVITY_NO_HISTORY)
             startActivity(intent)
         }
         legendaryButton.setOnClickListener { view ->
             val intent = Intent(this, MapsActivity::class.java)
+            intent.addFlags(Intent.FLAG_ACTIVITY_NO_HISTORY)
             startActivity(intent)
         }
 

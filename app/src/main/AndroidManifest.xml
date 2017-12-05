@@ -34,7 +34,8 @@
         <activity
             android:name=".MainActivity"
             android:label="Songle"
-            android:theme="@style/AppTheme.NoActionBar">
+            android:theme="@style/AppTheme.NoActionBar"
+            android:launchMode="singleInstance">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -45,11 +46,13 @@
         </activity>
         <activity
             android:name=".CorrectGuess"
-            android:label="Songle" />
+            android:label="Songle"
+            android:launchMode="singleInstance"/>
         <activity
             android:name=".CompletedSongs"
             android:label="Songle"
-            android:theme="@style/AppTheme.NoActionBar" />
+            android:theme="@style/AppTheme.NoActionBar"
+            android:launchMode="singleInstance"/>
         <activity
             android:name=".MapsActivity"
             android:label="Songle"
@@ -57,11 +60,13 @@
         <activity
             android:name=".CollectedWords"
             android:label="Songle"
-            android:theme="@style/AppTheme.NoActionBar" />
+            android:theme="@style/AppTheme.NoActionBar"
+            android:launchMode="singleInstance"/>
         <activity
             android:name=".AutoCompletePage"
             android:label="Songle"
-            android:theme="@style/AppTheme.NoActionBar"/>
+            android:theme="@style/AppTheme.NoActionBar"
+            android:launchMode="singleInstance"/>
     </application>
 
 </manifest>
