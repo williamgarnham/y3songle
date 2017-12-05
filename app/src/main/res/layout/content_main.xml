@@ -21,66 +21,66 @@
 
 
     <Button
-        android:id="@+id/button2"
+        android:id="@+id/contButton"
         android:layout_width="155dp"
         android:layout_height="45dp"
-        android:layout_alignStart="@+id/button8"
-        android:layout_alignTop="@+id/button6"
+        android:layout_alignStart="@+id/completedSongs"
+        android:layout_alignTop="@+id/expertButton"
         android:text="Continue Game"
         android:visibility="visible" />
 
     <Button
-        android:id="@+id/button3"
+        android:id="@+id/easyButton"
         android:layout_width="126dp"
         android:layout_height="45dp"
-        android:layout_above="@+id/button4"
-        android:layout_alignStart="@+id/button4"
+        android:layout_above="@+id/interButton"
+        android:layout_alignStart="@+id/interButton"
         android:layout_marginBottom="14dp"
         android:text="Easy"
         android:visibility="visible" />
 
     <Button
-        android:id="@+id/button4"
+        android:id="@+id/interButton"
         android:layout_width="wrap_content"
         android:layout_height="45dp"
-        android:layout_above="@+id/button5"
-        android:layout_alignStart="@+id/button6"
+        android:layout_above="@+id/hardButton"
+        android:layout_alignStart="@+id/expertButton"
         android:layout_marginBottom="14dp"
         android:text="Intermediate"
         android:visibility="visible" />
 
     <Button
-        android:id="@+id/button5"
+        android:id="@+id/hardButton"
         android:layout_width="126dp"
         android:layout_height="45dp"
-        android:layout_above="@+id/button6"
-        android:layout_alignEnd="@+id/button6"
+        android:layout_above="@+id/expertButton"
+        android:layout_alignEnd="@+id/expertButton"
         android:layout_marginBottom="18dp"
         android:text="Hard"
         android:visibility="visible" />
 
     <Button
-        android:id="@+id/button6"
+        android:id="@+id/expertButton"
         android:layout_width="126dp"
         android:layout_height="45dp"
-        android:layout_above="@+id/button7"
-        android:layout_alignStart="@+id/button7"
+        android:layout_above="@+id/legendaryButton"
+        android:layout_alignStart="@+id/legendaryButton"
         android:layout_marginBottom="17dp"
         android:text="Expert"
         android:visibility="visible" />
 
     <Button
-        android:id="@+id/button7"
+        android:id="@+id/legendaryButton"
         android:layout_width="126dp"
         android:layout_height="45dp"
         android:layout_alignParentEnd="true"
-        android:layout_alignTop="@+id/button8"
+        android:layout_alignTop="@+id/completedSongs"
         android:layout_marginEnd="29dp"
         android:text="Legendary"
         android:visibility="visible" />
 
     <Button
-        android:id="@+id/button8"
+        android:id="@+id/completedSongs"
         android:layout_width="155dp"
         android:layout_height="55dp"
         android:layout_alignParentBottom="true"
@@ -91,35 +91,35 @@
         android:visibility="visible" />
 
     <ImageView
-        android:id="@+id/imageView"
+        android:id="@+id/songleLogo"
         android:layout_width="200dp"
         android:layout_height="150dp"
-        android:layout_alignBottom="@+id/button3"
+        android:layout_alignBottom="@+id/easyButton"
         android:layout_alignParentStart="true"
         app:srcCompat="@drawable/songlelogo" />
 
     <ImageView
-        android:id="@+id/imageView2"
+        android:id="@+id/levelImg"
         android:layout_width="126dp"
         android:layout_height="55dp"
-        android:layout_above="@+id/button3"
-        android:layout_alignStart="@+id/button3"
+        android:layout_above="@+id/easyButton"
+        android:layout_alignStart="@+id/easyButton"
         app:srcCompat="@drawable/choselevel" />
 
     <ImageView
-        android:id="@+id/imageView3"
+        android:id="@+id/musicImg1"
         android:layout_width="100dp"
         android:layout_height="80dp"
-        android:layout_alignEnd="@+id/button2"
+        android:layout_alignEnd="@+id/contButton"
         android:layout_centerVertical="true"
         android:layout_marginEnd="24dp"
         app:srcCompat="@drawable/musicnote" />
 
     <ImageView
-        android:id="@+id/imageView4"
+        android:id="@+id/musicImg2"
         android:layout_width="100dp"
         android:layout_height="100dp"
-        android:layout_above="@+id/imageView2"
-        android:layout_alignEnd="@+id/button4"
+        android:layout_above="@+id/levelImg"
+        android:layout_alignEnd="@+id/interButton"
         app:srcCompat="@drawable/musicnote" />
 </RelativeLayout>

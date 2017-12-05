@@ -32,7 +32,7 @@
             android:value="AIzaSyCdvTEaheFAH7VqQ8qARNWRe7NBzPXLfro" />
 
         <activity
-            android:name=".CorrectGuess"
+            android:name=".MainActivity"
             android:label="Songle"
             android:theme="@style/AppTheme.NoActionBar">
             <intent-filter>
@@ -44,7 +44,7 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".MainActivity"
+            android:name=".CorrectGuess"
             android:label="Songle" />
         <activity
             android:name=".CompletedSongs"
