@@ -112,6 +112,8 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback,
 
     }
 
+    override fun onBackPressed() {}
+
 
     var stream : InputStream? = null
     override fun downloadComp(str : String){
