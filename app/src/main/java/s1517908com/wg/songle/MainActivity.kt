@@ -22,6 +22,10 @@ class MainActivity : AppCompatActivity() {
         setSupportActionBar(toolbar)
 
 
+        helpB.setOnClickListener() { view ->
+            val intent = Intent(this, HelpPage::class.java)
+            startActivity(intent)
+        }
         completedSongs.setOnClickListener { view ->
             val intent = Intent(this, CompletedSongs::class.java)
             startActivity(intent)

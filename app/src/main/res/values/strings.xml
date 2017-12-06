@@ -20,6 +20,13 @@
     	Put a gun against his head,\n
     	Pulled my trigger, now hes dead.\n
     </string>
+	<string name="helpStr"> 	Help Page\n
+		Here are the rules of the game\n
+		Aim: To pick up words on a map in order to guess the name of they song they belong to.\n
+		You can choose the difficulty on the homepage, each one makes the game harder. But no worries! You can use points to help you in the game. \n
+		You can also see your completed songs and link to their youtube video in the completed songs page \n
+    </string>
     <string name="title_activity_auto_complete_page">AutoCompletePage</string>
     <string name="title_activity_correct_guess">CorrectGuess</string>
+    <string name="title_activity_help_page">HelpPage</string>
 </resources>

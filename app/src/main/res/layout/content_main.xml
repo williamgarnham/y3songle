@@ -122,4 +122,17 @@
         android:layout_above="@+id/levelImg"
         android:layout_alignEnd="@+id/interButton"
         app:srcCompat="@drawable/musicnote" />
+
+    <android.support.design.widget.FloatingActionButton
+        android:id="@+id/helpB"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignEnd="@+id/interButton"
+        android:layout_alignParentBottom="true"
+        android:layout_marginBottom="18dp"
+        android:clickable="true"
+        android:elevation="0dp"
+        app:backgroundTint="@color/TextForGreen"
+        app:srcCompat="@drawable/questionmark" />
+
 </RelativeLayout>
