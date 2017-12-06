@@ -58,12 +58,7 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback,
     var points :String = ""
 
     fun readTxtFile() {
-        //val res :Resources = getResources()
-        //val pointsIS: InputStream  = res.openRawResource(R.raw.pointsnumber)
-        //val bufferedReaderTXT: BufferedReader = BufferedReader(InputStreamReader(pointsIS))
-        //points = bufferedReaderTXT.readText()
-
-        val fis : FileInputStream= openFileInput("hello.txt")
+        val fis : FileInputStream= openFileInput("pointsnum.txt")
         val isr = InputStreamReader(fis)
         val bufferedReaderTxt = BufferedReader(isr)
         points = bufferedReaderTxt.readText()
@@ -88,7 +83,7 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback,
 
     fun createPointsTxtFile(){
         val filename = "pointsnum.txt"
-        points = "10"
+        points = "50"
         val outputStream: FileOutputStream
 
         try {
@@ -128,11 +123,14 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback,
         val filter = IntentFilter(ConnectivityManager.CONNECTIVITY_ACTION)
         registerReceiver(receiver, filter)
 
+        val path :String = this.getFilesDir().getAbsolutePath() + "/" + "pointsnum.txt";
+        //val pointsFile : File = getBaseContext().getFileStreamPath("pointsnum.txt")
+        val pointsFile : File = File(path)
+        val pointsFileExists : Boolean? = pointsFile.exists()
+        Log.d("FILEPATH", path)
+        Log.d("EXISTS?",pointsFileExists.toString())
 
-        val pointsFile : File = getBaseContext().getFileStreamPath("pointsnum")
-        val pointsFileExists : Boolean = pointsFile.exists()
-
-        if(pointsFileExists){
+        if(pointsFileExists == true){
             readTxtFile()
         }else{
             createPointsTxtFile()
