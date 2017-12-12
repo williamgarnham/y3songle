@@ -62,6 +62,8 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback,
         val isr = InputStreamReader(fis)
         val bufferedReaderTxt = BufferedReader(isr)
         points = bufferedReaderTxt.readText()
+        fis.close()
+        isr.close()
 
     }
 

@@ -1,5 +1,6 @@
 package s1517908com.wg.songle
 
+import android.content.Context
 import android.os.Bundle
 import android.support.design.widget.Snackbar
 import android.support.v7.app.AppCompatActivity
@@ -7,13 +8,26 @@ import android.support.v7.app.AppCompatActivity
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.content_main.*
 import android.content.Intent
-
-
+import java.io.File
+import java.io.FileOutputStream
 
 
 class MainActivity : AppCompatActivity() {
 
+    fun createCompletedTxtFile(){
+        val filename = "completedSongsFile.txt"
+        var emptystring = ""
+        val outputStream: FileOutputStream
 
+        try {
+            outputStream = openFileOutput(filename, Context.MODE_PRIVATE)
+            outputStream.write(emptystring.toByteArray())
+            outputStream.close()
+        } catch (e: Exception) {
+            e.printStackTrace()
+        }
+
+    }
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -21,8 +35,15 @@ class MainActivity : AppCompatActivity() {
         setContentView(R.layout.activity_main)
         setSupportActionBar(toolbar)
 
+        val path :String = this.getFilesDir().getAbsolutePath() + "/" + "completedSongsFile.txt";
+        val completedFile : File = File(path)
+        val completedFileExists : Boolean? = completedFile.exists()
 
-        helpB.setOnClickListener() { view ->
+        if(completedFileExists == false){
+            createCompletedTxtFile()
+        }
+
+        helpB.setOnClickListener { view ->
             val intent = Intent(this, HelpPage::class.java)
             startActivity(intent)
         }

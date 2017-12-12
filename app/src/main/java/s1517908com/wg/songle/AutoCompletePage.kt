@@ -36,8 +36,10 @@ class AutoCompletePage : AppCompatActivity() {
                 points = Integer.toString(points.toInt() - 20)
                 writeTxtFile()
                 val intent = Intent(this, MainActivity::class.java)
+                intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
                 intent.addFlags(Intent.FLAG_ACTIVITY_NO_HISTORY)
                 startActivity(intent)
+                finish()
             }
 
 
@@ -50,6 +52,8 @@ class AutoCompletePage : AppCompatActivity() {
         val isr = InputStreamReader(fis)
         val bufferedReaderTxt = BufferedReader(isr)
         points = bufferedReaderTxt.readText()
+        isr.close()
+        fis.close()
 
     }
     fun writeTxtFile() {
