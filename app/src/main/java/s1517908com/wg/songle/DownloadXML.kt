@@ -1,6 +1,7 @@
 package s1517908com.wg.songle
 import android.os.AsyncTask
 import android.content.res.Resources
+import android.util.Log
 import android.util.Xml
 import org.xmlpull.v1.XmlPullParser
 import java.io.IOException
@@ -80,8 +81,10 @@ class DownloadXML(val caller : DownloadCompleteListener) :
                 continue
             }
             // Starts by looking for the entry tag
+            Log.d("PARSERTAG",parser.name)
             if (parser.name == "Song") {
                 songs.add(readSong(parser))
+                Log.d("SONGADDED","TRUE")
             } else {
 
             }
@@ -91,7 +94,7 @@ class DownloadXML(val caller : DownloadCompleteListener) :
 
     @Throws(XmlPullParserException::class, IOException::class)
     private fun readSong(parser: XmlPullParser): Song {
-        parser.require(XmlPullParser.START_TAG, ns, "Placemark")
+        parser.require(XmlPullParser.START_TAG, ns, "Song")
         var num = ""
         var artist = ""
         var title = ""

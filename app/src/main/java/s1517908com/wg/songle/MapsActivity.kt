@@ -69,8 +69,6 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback,
 
     }
 
-
-
     fun writeTxtFile() {
         //File("pointsnum.txt").bufferedWriter().use { out -> out.write(points) }
 
