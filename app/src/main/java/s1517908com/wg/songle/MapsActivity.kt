@@ -35,6 +35,8 @@ import kotlinx.android.synthetic.main.activity_maps.*
 import android.support.design.widget.Snackbar
 import android.util.Log
 import android.view.View
+import java.net.URLConnection
+import java.util.*
 
 class MapsActivity : AppCompatActivity(), OnMapReadyCallback,
         GoogleApiClient.ConnectionCallbacks,
@@ -57,8 +59,8 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback,
 
     var points :String = ""
 
-    fun readTxtFile() {
-        val fis : FileInputStream= openFileInput("pointsnum.txt")
+    fun readTxtFile(filename: String) {
+        val fis : FileInputStream= openFileInput(filename)
         val isr = InputStreamReader(fis)
         val bufferedReaderTxt = BufferedReader(isr)
         points = bufferedReaderTxt.readText()
@@ -66,6 +68,8 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback,
         isr.close()
 
     }
+
+
 
     fun writeTxtFile() {
         //File("pointsnum.txt").bufferedWriter().use { out -> out.write(points) }
@@ -98,14 +102,84 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback,
 
     }
 
+    fun readCompFile(difficulty: Int):ArrayList<Int>{
+        val fileName :String = this.getFilesDir().getAbsolutePath() + "/" + "completedSongsFile"+difficulty.toString()+".txt"
+        Log.d("MAPSCFILE",fileName)
+        val cFile : File = File(fileName)
+        var i :Int = 1
+        var songsArray = arrayListOf<Int>()
+        // using extension function readLines
+        cFile.readLines().forEach {
+            songsArray.add(i)
+        }
+
+        return songsArray
+    }
+
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         val intent = intent
-        val URL = "http://www.inf.ed.ac.uk/teaching/courses/cslp/data/songs/01/map1.kml"
+
+        //figure out what song to play based on difficulty
+        val bundle:Bundle = getIntent().getExtras()
+        var mapNum:String = bundle.getString("map")
+        var diff: Int
+
+        if(mapNum == "map1") {
+            diff = 1
+        }else if(mapNum == "map2"){
+            diff = 2
+        }else if(mapNum == "map3"){
+            diff = 3
+        }else if(mapNum == "map4"){
+            diff = 4
+        }else{
+            diff = 5
+        }
+
+
+        val songsArray = readCompFile(diff)
+
+        //choose song by checking how many songs are, then comparing to songsArray and randomly generating
+        //val maxSong = getSongNumbers()
+        val maxSong = GetMaxSongNumber(this,this)
+        val mS = maxSong.execute("http://www.inf.ed.ac.uk/teaching/courses/cslp/data/songs/songs.txt").get()
+
+
+
+
+        val rand: Random = Random()
+        var randNum = 0
+
+        var found:Boolean = true
+
+        do{
+            found = true
+            randNum = rand.nextInt(mS.toInt()-1) + 1
+
+            for(x in songsArray){
+                if(x == randNum){
+                    found = false
+                }
+            }
+
+        }while(found == false)
+
+        var songNum: String
+
+        if(randNum > 9){
+            songNum = randNum.toString()
+        }else{
+            songNum = "0"+randNum.toString()
+        }
+
+        val URL = "http://www.inf.ed.ac.uk/teaching/courses/cslp/data/songs/"+ songNum+"/" + mapNum + ".kml"
         val kmldownloader = DownloadKml(this,this)
         kmldownloader.execute(URL)
 
-
+        Log.d("SongNum", songNum)
+        Log.d("MapNum",mapNum)
 
 
         super.onCreate(savedInstanceState)
@@ -125,15 +199,13 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback,
         val filter = IntentFilter(ConnectivityManager.CONNECTIVITY_ACTION)
         registerReceiver(receiver, filter)
 
-        val path :String = this.getFilesDir().getAbsolutePath() + "/" + "pointsnum.txt";
-        //val pointsFile : File = getBaseContext().getFileStreamPath("pointsnum.txt")
+        val path :String = this.getFilesDir().getAbsolutePath() + "/" + "pointsnum.txt"
         val pointsFile : File = File(path)
         val pointsFileExists : Boolean? = pointsFile.exists()
-        Log.d("FILEPATH", path)
-        Log.d("EXISTS?",pointsFileExists.toString())
+
 
         if(pointsFileExists == true){
-            readTxtFile()
+            readTxtFile("pointsnum.txt")
         }else{
             createPointsTxtFile()
         }
@@ -170,6 +242,12 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback,
 
         autoCompleteB.setOnClickListener { view ->
             val intent = Intent(this, AutoCompletePage::class.java)
+            val bundle:Bundle = Bundle()
+
+            bundle.putString("map", mapNum)
+            bundle.putString("song",songNum)
+
+            intent.putExtras(bundle)
             startActivity(intent)
         }
 
@@ -344,6 +422,8 @@ class DownloadKml (val caller: DownloadListener, val context: Context) : AsyncTa
                 line = input.readLine()
             }
 
+
+
         }catch(e:Exception){
 
         }
@@ -358,6 +438,52 @@ class DownloadKml (val caller: DownloadListener, val context: Context) : AsyncTa
 
         }
         return fileString.toString()
+    }
+
+
+    override fun onPostExecute(result: String?) {
+        if(result != null){
+            caller.downloadComp(result)
+        }
+    }
+
+
+
+
+
+}
+
+
+class GetMaxSongNumber (val caller: DownloadListener, val context: Context) : AsyncTask<String, Void, String>() {
+
+
+    val tag = "GetMaxSongNumber"
+    var cont = context
+
+
+    override fun doInBackground(vararg f_url: String): String?{
+        var str:String = ""
+
+        try{
+            val url = URL(f_url[0])
+            val input = BufferedReader(InputStreamReader(url.openStream()))
+
+
+            // Read all the text returned by the server
+
+            val lines = input.readLines()
+
+            str = lines[lines.size -6]
+            str = str.removeSuffix("</Number>")
+            str = str.removePrefix("    <Number>")
+            input.close()
+
+
+        }catch(e:Exception){
+
+        }
+
+        return str
     }
 
 

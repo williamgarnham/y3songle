@@ -16,13 +16,15 @@ import java.net.HttpURLConnection
 data class Song(val num: String, val artist: String, val title: String, val link: String)
 
 
-class DownloadXml(private val resources : Resources,
-                      private val caller : DownloadCompleteListener,
-                      private val summaryPref : Boolean) :
+class DownloadXML(val caller : DownloadCompleteListener) :
         AsyncTask<String, Void, String>() {
 
 
     var solist = emptyList<Song>()
+
+    fun getSoList():List<Song>{
+        return solist
+    }
 
     override fun doInBackground(vararg urls: String): String {
         return try {
@@ -169,7 +171,12 @@ class DownloadXml(private val resources : Resources,
         caller.downloadComplete(result)
     }
 
-    interface DownloadCompleteListener {
-        fun downloadComplete(result: String)
+
+}
+
+interface DownloadCompleteListener {
+    fun downloadComplete(result: String){
+
     }
 }
+

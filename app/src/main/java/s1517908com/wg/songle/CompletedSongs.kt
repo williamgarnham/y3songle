@@ -2,27 +2,31 @@ package s1517908com.wg.songle
 
 import android.content.Context
 import android.os.Bundle
-import android.support.design.widget.Snackbar
 import android.support.v7.app.AppCompatActivity
+import android.util.Log
 
 import kotlinx.android.synthetic.main.activity_completed_songs.*
-import android.content.Intent
 import kotlinx.android.synthetic.main.content_completed_songs.*
 import java.io.FileOutputStream
 
-class CompletedSongs : AppCompatActivity() {
+
+
+class CompletedSongs : AppCompatActivity(), DownloadCompleteListener {
 
     fun clearCompletedTxtFile(){
-        val filename = "completedSongsFile.txt"
-        var emptyString = ""
-        val outputStream: FileOutputStream
+        val filename = "completedSongsFile"
+        var emptystring = ""
+        var outputStream: FileOutputStream
+        for(x in 1..5) {
+            try {
+                var newFileName = filename + x.toString() + ".txt"
 
-        try {
-            outputStream = openFileOutput(filename, Context.MODE_PRIVATE)
-            outputStream.write(emptyString.toByteArray())
-            outputStream.close()
-        } catch (e: Exception) {
-            e.printStackTrace()
+                outputStream = openFileOutput(newFileName, Context.MODE_PRIVATE)
+                outputStream.write(emptystring.toByteArray())
+                outputStream.close()
+            } catch (e: Exception) {
+                e.printStackTrace()
+            }
         }
 
     }
@@ -32,8 +36,17 @@ class CompletedSongs : AppCompatActivity() {
         setContentView(R.layout.activity_completed_songs)
         setSupportActionBar(toolbar)
 
+        val songs = DownloadXML(this)
+        songs.execute("http://www.inf.ed.ac.uk/teaching/courses/cslp/data/songs/songs.xml")
+        val theSongs = songs.getSoList()
 
+        Log.d("CHECK", "CHECK")
+        for(x in 1..theSongs.size){
+            Log.d("SONGE1name", theSongs.get(x).num)
+        }
+        Log.d("CHECK","CHECK")
 
+        //Log.d("SONGS",thesongs)
         clearSongsB.setOnClickListener { view ->
             clearCompletedTxtFile()
         }
@@ -41,3 +54,5 @@ class CompletedSongs : AppCompatActivity() {
     }
 
 }
+
+

@@ -8,6 +8,7 @@ import android.support.v7.app.AppCompatActivity
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.content_main.*
 import android.content.Intent
+import android.util.Log
 import java.io.File
 import java.io.FileOutputStream
 
@@ -15,17 +16,22 @@ import java.io.FileOutputStream
 class MainActivity : AppCompatActivity() {
 
     fun createCompletedTxtFile(){
-        val filename = "completedSongsFile.txt"
+        val filename = "completedSongsFile"
         var emptystring = ""
-        val outputStream: FileOutputStream
+        var outputStream: FileOutputStream
+        for(x in 1..5) {
+            try {
+                var newFileName = filename + x.toString() + ".txt"
+                Log.d("FILENAMES",newFileName)
 
-        try {
-            outputStream = openFileOutput(filename, Context.MODE_PRIVATE)
-            outputStream.write(emptystring.toByteArray())
-            outputStream.close()
-        } catch (e: Exception) {
-            e.printStackTrace()
+                outputStream = openFileOutput(newFileName, Context.MODE_PRIVATE)
+                outputStream.write(emptystring.toByteArray())
+                outputStream.close()
+            } catch (e: Exception) {
+                e.printStackTrace()
+            }
         }
+        Log.d("COMPSONGFILE","created")
 
     }
 
@@ -35,13 +41,16 @@ class MainActivity : AppCompatActivity() {
         setContentView(R.layout.activity_main)
         setSupportActionBar(toolbar)
 
-        val path :String = this.getFilesDir().getAbsolutePath() + "/" + "completedSongsFile.txt";
+        val path :String = this.getFilesDir().getAbsolutePath() + "/" + "completedSongsFile1.txt";
         val completedFile : File = File(path)
         val completedFileExists : Boolean? = completedFile.exists()
 
         if(completedFileExists == false){
             createCompletedTxtFile()
+        }else{
+            Log.d("COMPSONGFILE","exists")
         }
+
 
         helpB.setOnClickListener { view ->
             val intent = Intent(this, HelpPage::class.java)
@@ -59,26 +68,51 @@ class MainActivity : AppCompatActivity() {
         easyButton.setOnClickListener { view ->
             val intent = Intent(this, MapsActivity::class.java)
             intent.addFlags(Intent.FLAG_ACTIVITY_NO_HISTORY)
+            val bundle:Bundle = Bundle()
+
+            bundle.putString("map", "map5")
+
+            intent.putExtras(bundle)
             startActivity(intent)
         }
         interButton.setOnClickListener { view ->
             val intent = Intent(this, MapsActivity::class.java)
             intent.addFlags(Intent.FLAG_ACTIVITY_NO_HISTORY)
+            val bundle:Bundle = Bundle()
+
+            bundle.putString("map", "map4")
+
+            intent.putExtras(bundle)
             startActivity(intent)
         }
         hardButton.setOnClickListener { view ->
             val intent = Intent(this, MapsActivity::class.java)
             intent.addFlags(Intent.FLAG_ACTIVITY_NO_HISTORY)
+            val bundle:Bundle = Bundle()
+
+            bundle.putString("map", "map3")
+
+            intent.putExtras(bundle)
             startActivity(intent)
         }
         expertButton.setOnClickListener { view ->
             val intent = Intent(this, MapsActivity::class.java)
             intent.addFlags(Intent.FLAG_ACTIVITY_NO_HISTORY)
+            val bundle:Bundle = Bundle()
+
+            bundle.putString("map", "map2")
+
+            intent.putExtras(bundle)
             startActivity(intent)
         }
         legendaryButton.setOnClickListener { view ->
             val intent = Intent(this, MapsActivity::class.java)
             intent.addFlags(Intent.FLAG_ACTIVITY_NO_HISTORY)
+            val bundle:Bundle = Bundle()
+
+            bundle.putString("map", "map1")
+
+            intent.putExtras(bundle)
             startActivity(intent)
         }
 

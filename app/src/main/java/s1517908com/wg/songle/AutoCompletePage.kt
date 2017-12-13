@@ -10,10 +10,7 @@ import kotlinx.android.synthetic.main.activity_auto_complete_page.*
 import android.view.View
 import kotlinx.android.synthetic.main.content_auto_complete_page.*
 import android.content.Intent
-import java.io.BufferedReader
-import java.io.FileInputStream
-import java.io.FileOutputStream
-import java.io.InputStreamReader
+import java.io.*
 
 
 class AutoCompletePage : AppCompatActivity() {
@@ -38,6 +35,14 @@ class AutoCompletePage : AppCompatActivity() {
                 val intent = Intent(this, MainActivity::class.java)
                 intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
                 intent.addFlags(Intent.FLAG_ACTIVITY_NO_HISTORY)
+
+                val bundle:Bundle = getIntent().getExtras()
+                var mapNum:String = bundle.getString("map")
+                var songNum:String = bundle.getString("song")
+
+
+                writeToComplFile(songNum,mapNum)
+
                 startActivity(intent)
                 finish()
             }
@@ -45,6 +50,20 @@ class AutoCompletePage : AppCompatActivity() {
 
 
         }
+    }
+
+    fun writeToComplFile(song:String,map:String){
+
+        val filename = "completedSongsFile" + map + ".txt"
+
+        try {
+            val fw = FileWriter(filename, true) //the true will append the new data
+            fw.write(song+"\n")//appends the string to the file
+            fw.close()
+        } catch (e: Exception) {
+            e.printStackTrace()
+        }
+
     }
 
     fun readTxtFile() {
