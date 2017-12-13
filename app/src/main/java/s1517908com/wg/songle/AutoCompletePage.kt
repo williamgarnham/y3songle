@@ -10,6 +10,7 @@ import kotlinx.android.synthetic.main.activity_auto_complete_page.*
 import android.view.View
 import kotlinx.android.synthetic.main.content_auto_complete_page.*
 import android.content.Intent
+import android.util.Log
 import java.io.*
 
 
@@ -40,6 +41,7 @@ class AutoCompletePage : AppCompatActivity() {
                 var mapNum:String = bundle.getString("map")
                 var songNum:String = bundle.getString("song")
 
+                Log.d("SONG AND MAP ADDED1: ", songNum +" "+ mapNum)
 
                 writeToComplFile(songNum,mapNum)
 
@@ -54,15 +56,21 @@ class AutoCompletePage : AppCompatActivity() {
 
     fun writeToComplFile(song:String,map:String){
 
-        val filename = "completedSongsFile" + map + ".txt"
+        val filename = this.getFilesDir().getAbsolutePath() + "/" +"completedSongsFile" + map.removePrefix("map")+ ".txt"
+        Log.d("AUTOCOMPLETE FILENAME",filename)
 
         try {
             val fw = FileWriter(filename, true) //the true will append the new data
-            fw.write(song+"\n")//appends the string to the file
+            val bw = BufferedWriter(fw)
+            bw.append(song)
+            bw.newLine()
+            //fw.write(song+"\n")//appends the string to the file
+            bw.close()
             fw.close()
         } catch (e: Exception) {
             e.printStackTrace()
         }
+        Log.d("SONG AND MAP ADDED2: ", song +" "+ map)
 
     }
 

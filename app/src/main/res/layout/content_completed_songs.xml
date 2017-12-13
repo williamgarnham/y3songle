@@ -18,6 +18,23 @@
         tools:layout_editor_absoluteX="0dp"
         tools:layout_editor_absoluteY="0dp" />
 
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentTop="true"
+        android:layout_marginTop="136dp"
+        tools:layout_editor_absoluteX="8dp"
+        tools:layout_editor_absoluteY="8dp">
+
+        <TextView
+            android:id="@+id/songsText"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textColor="@color/TextForGreen"
+            android:textSize="14sp"
+            android:textStyle="bold" />
+    </ScrollView>
     <Button
         android:id="@+id/clearSongsB"
         android:layout_width="300dp"
@@ -28,47 +45,4 @@
         android:text="Clear completed songs "
         android:textSize="18sp" />
 
-    <android.support.v4.widget.NestedScrollView
-        android:layout_width="match_parent"
-        android:layout_height="300dp"
-        android:layout_below="@+id/imageView5"
-        android:layout_centerHorizontal="true"
-        android:layout_marginHorizontal="30dp"
-        android:layout_marginTop="9dp"
-        android:fillViewport="false">
-
-        <LinearLayout
-            android:id="@+id/ListOfCompleted"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="vertical">
-
-
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:text="I fought the law         Easy"
-                android:textSize="25sp" />
-
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:text="Song                            Easy"
-                android:textSize="25sp" />
-
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:text="Perfect day                 Easy"
-                android:textSize="25sp" />
-
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:text="Seven Nation Army   Easy"
-                android:textSize="25sp" />
-        </LinearLayout>
-
-
-    </android.support.v4.widget.NestedScrollView>
 </RelativeLayout>

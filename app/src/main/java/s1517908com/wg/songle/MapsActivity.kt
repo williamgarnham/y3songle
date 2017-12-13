@@ -119,6 +119,18 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback,
     override fun onCreate(savedInstanceState: Bundle?) {
         val intent = intent
 
+        val fis : FileInputStream= openFileInput("completedSongsFile1.txt")
+        val isr = InputStreamReader(fis)
+        val bufferedReaderTxt = BufferedReader(isr)
+        var compSongs = bufferedReaderTxt.readText()
+        fis.close()
+        isr.close()
+
+        Log.d("COMPLETEDSONGSMAP","SONGS" + compSongs)
+
+
+
+
         //figure out what song to play based on difficulty
         val bundle:Bundle = getIntent().getExtras()
         var mapNum:String = bundle.getString("map")
@@ -138,6 +150,7 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback,
 
 
         val songsArray = readCompFile(diff)
+        Log.d("PLAYEDSONGSMAP",songsArray.toString())
 
         //choose song by checking how many songs are, then comparing to songsArray and randomly generating
         //val maxSong = getSongNumbers()
