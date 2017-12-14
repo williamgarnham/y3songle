@@ -1,6 +1,7 @@
 package s1517908com.wg.songle
 
 import android.content.Context
+import android.content.Intent
 import android.os.Bundle
 import android.support.v7.app.AppCompatActivity
 import android.util.Log
@@ -146,6 +147,11 @@ class CompletedSongs : AppCompatActivity(), DownloadCompleteListener {
         songsText.visibility = View.VISIBLE
         Log.d("CHECK","CHECK")
 
+    }
+
+    override fun onBackPressed() {
+        val intent = Intent(this, MainActivity::class.java)
+        startActivity(intent)
     }
 
 }

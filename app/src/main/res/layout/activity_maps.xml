@@ -84,7 +84,7 @@
         android:background="@color/colorPrimary"
         android:ems="10"
         android:inputType="textPersonName"
-        android:text="Guess Song"
+        android:hint="Guess Song"
         android:textAlignment="center"
         android:textColor="@color/TextForGreen"
         android:textStyle="bold" />

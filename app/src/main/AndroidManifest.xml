@@ -47,7 +47,8 @@
         <activity
             android:name=".CorrectGuess"
             android:label="Songle"
-            android:launchMode="singleInstance" />
+            android:launchMode="singleInstance"
+            android:theme="@style/AppTheme.NoActionBar"/>
         <activity
             android:name=".CompletedSongs"
             android:label="Songle"

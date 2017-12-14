@@ -34,6 +34,7 @@ import android.widget.Button
 import kotlinx.android.synthetic.main.activity_maps.*
 import android.support.design.widget.Snackbar
 import android.util.Log
+import android.view.KeyEvent
 import android.view.View
 import java.net.URLConnection
 import java.util.*
@@ -41,7 +42,7 @@ import java.util.*
 class MapsActivity : AppCompatActivity(), OnMapReadyCallback,
         GoogleApiClient.ConnectionCallbacks,
         GoogleApiClient.OnConnectionFailedListener,
-        LocationListener, DownloadListener {
+        LocationListener, DownloadListener, DownloadCompleteListener {
 
 
     private lateinit var mMap: GoogleMap
@@ -58,6 +59,8 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback,
     val tag = "MapsActivity"
 
     var points :String = ""
+    var title :String = ""
+    var isCorrect:Boolean = false
 
     fun readTxtFile(filename: String) {
         val fis : FileInputStream= openFileInput(filename)
@@ -114,22 +117,22 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback,
         return songsArray
     }
 
+    fun openCorrAct(song:String,map:String){
+        val intentComp = Intent(this, CorrectGuess::class.java)
+        intentComp.addFlags(Intent.FLAG_ACTIVITY_NO_HISTORY)
+        val bundleComp:Bundle = Bundle()
 
+        bundleComp.putString("map", map)
+        bundleComp.putString("song",song)
+
+        intentComp.putExtras(bundleComp)
+        startActivity(intentComp)
+
+
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         val intent = intent
-
-        val fis : FileInputStream= openFileInput("completedSongsFile1.txt")
-        val isr = InputStreamReader(fis)
-        val bufferedReaderTxt = BufferedReader(isr)
-        var compSongs = bufferedReaderTxt.readText()
-        fis.close()
-        isr.close()
-
-        Log.d("COMPLETEDSONGSMAP","SONGS" + compSongs)
-
-
-
 
         //figure out what song to play based on difficulty
         val bundle:Bundle = getIntent().getExtras()
@@ -192,6 +195,18 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback,
         Log.d("SongNum", songNum)
         Log.d("MapNum",mapNum)
 
+        //get the song title
+        val songsList = DownloadXML(this)
+        songsList.execute("http://www.inf.ed.ac.uk/teaching/courses/cslp/data/songs/songs.xml").get()
+        val theSongsList = songsList.getSoList()
+
+        for(i in theSongsList){
+            if(i.num == songNum){
+                title = i.title
+            }
+        }
+
+
 
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_maps)
@@ -223,10 +238,33 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback,
 
         pointsText.text = points
 
+
+        guessText.setText(title)
+        guessText.setOnKeyListener(View.OnKeyListener { v, keyCode, event ->
+            if (keyCode == KeyEvent.KEYCODE_ENTER) {
+                if(guessText.text.toString().toLowerCase() == title.toLowerCase()){
+
+
+                    points = Integer.toString(points.toInt() + 10)
+                    pointsText.text = points
+                    writeTxtFile()
+
+                    openCorrAct(songNum,mapNum)
+
+
+                }else{
+                    Toast.makeText(this, "Incorrect!",
+                            Toast.LENGTH_LONG).show()
+
+                }
+                return@OnKeyListener true
+            }
+            false
+        })
+
+
         guessText.visibility = View.INVISIBLE
         guessSongButton.setOnClickListener { view ->
-            Toast.makeText(this, "Incorrect!",
-                    Toast.LENGTH_LONG).show()
 
             if(guessText.visibility == View.VISIBLE){
                 guessText.visibility = View.INVISIBLE
