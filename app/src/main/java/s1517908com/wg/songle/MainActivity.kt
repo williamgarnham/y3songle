@@ -60,11 +60,6 @@ class MainActivity : AppCompatActivity() {
             val intent = Intent(this, CompletedSongs::class.java)
             startActivity(intent)
         }
-        contButton.setOnClickListener { view ->
-            val intent = Intent(this, MapsActivity::class.java)
-            intent.addFlags(Intent.FLAG_ACTIVITY_NO_HISTORY)
-            startActivity(intent)
-        }
         easyButton.setOnClickListener { view ->
             val intent = Intent(this, MapsActivity::class.java)
             intent.addFlags(Intent.FLAG_ACTIVITY_NO_HISTORY)

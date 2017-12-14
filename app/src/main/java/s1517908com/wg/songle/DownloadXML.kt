@@ -146,13 +146,6 @@ class DownloadXML(val caller : DownloadCompleteListener) :
     }
 
 
-    @Throws(IOException::class, XmlPullParserException::class)
-    private fun readXXXX(parser: XmlPullParser): String {
-        parser.require(XmlPullParser.START_TAG, ns, "Song")
-        val Point = readText(parser)
-        parser.require(XmlPullParser.END_TAG, ns, "Point")
-        return Point
-    }
 
 
 

@@ -115,33 +115,28 @@ class CompletedSongs : AppCompatActivity(), DownloadCompleteListener {
 
         var largeString: String = ""
 
-        for(i in 1..5){
-            if(i == 1){
-                for(x in legend){
-                    largeString += x.title + " " + x.link + " Legend\n"
-                }
-            }
-            if(i == 2){
-                for(x in expert){
-                    largeString += x.title + " " + x.link + " Expert\n"
-                }
-            }
-            if(i == 3){
-                for(x in hard){
-                    largeString += x.title + " " + x.link + " Hard\n"
-                }
-            }
-            if(i == 4){
-                for(x in inter){
-                    largeString += x.title + " " + x.link + " Intermediate\n"
-                }
-            }
-            if(i == 5){
-                for(x in easy){
-                    largeString += x.title + " " + x.link + " Easy\n"
-                }
-            }
+
+        for(x in legend){
+            largeString += x.title + " " + x.link + " Legend\n"
         }
+
+        for(x in expert){
+            largeString += x.title + " " + x.link + " Expert\n"
+        }
+
+        for(x in hard){
+            largeString += x.title + " " + x.link + " Hard\n"
+        }
+
+        for(x in inter){
+            largeString += x.title + " " + x.link + " Intermediate\n"
+        }
+
+        for(x in easy){
+            largeString += x.title + " " + x.link + " Easy\n"
+        }
+
+
         Log.d("Songs",largeString)
         songsText.text = largeString
         songsText.visibility = View.VISIBLE
@@ -151,7 +146,9 @@ class CompletedSongs : AppCompatActivity(), DownloadCompleteListener {
 
     override fun onBackPressed() {
         val intent = Intent(this, MainActivity::class.java)
+        intent.addFlags(Intent.FLAG_ACTIVITY_NO_HISTORY)
         startActivity(intent)
+        finish()
     }
 
 }

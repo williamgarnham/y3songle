@@ -20,16 +20,7 @@
     android:background="@color/colorPrimary">
 
 
-    <Button
-        android:id="@+id/contButton"
-        android:layout_width="155dp"
-        android:layout_height="45dp"
-        android:layout_alignStart="@+id/completedSongs"
-        android:layout_alignTop="@+id/expertButton"
-        android:text="Continue Game"
-        android:visibility="visible" />
-
-    <Button
+        <Button
         android:id="@+id/easyButton"
         android:layout_width="126dp"
         android:layout_height="45dp"
@@ -110,9 +101,9 @@
         android:id="@+id/musicImg1"
         android:layout_width="100dp"
         android:layout_height="80dp"
-        android:layout_alignEnd="@+id/contButton"
+        android:layout_alignEnd="@+id/completedSongs"
         android:layout_centerVertical="true"
-        android:layout_marginEnd="24dp"
+        android:layout_marginEnd="19dp"
         app:srcCompat="@drawable/musicnote" />
 
     <ImageView

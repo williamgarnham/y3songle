@@ -89,4 +89,23 @@
         android:textColor="@color/TextForGreen"
         android:textStyle="bold" />
 
+    <ScrollView
+        android:id="@+id/collectedWordsSV"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_above="@+id/pointsButton"
+        android:layout_marginBottom="143dp"
+        android:layout_marginStart="19dp"
+        android:layout_toEndOf="@+id/guessText">
+
+        <TextView
+            android:id="@+id/collectedWordsTB"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@color/colorPrimary"
+            android:lineSpacingExtra="18sp"
+            android:textSize="18sp"
+            android:textStyle="bold" />
+    </ScrollView>
+
 </RelativeLayout>

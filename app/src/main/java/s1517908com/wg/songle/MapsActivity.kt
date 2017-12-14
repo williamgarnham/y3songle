@@ -60,7 +60,7 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback,
 
     var points :String = ""
     var title :String = ""
-    var isCorrect:Boolean = false
+    var collectedWords: String = ""
 
     fun readTxtFile(filename: String) {
         val fis : FileInputStream= openFileInput(filename)
@@ -188,17 +188,31 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback,
             songNum = "0"+randNum.toString()
         }
 
+
+        val songLyrics = GetMaxSongNumber(this,this)
+        val lyrics = songLyrics.execute("http://www.inf.ed.ac.uk/teaching/courses/cslp/data/songs/"+ songNum+ "/lyrics.txt").get()
+        //collectedWords = lyrics
+
+        Log.d("Lyrics",lyrics)
+
         val URL = "http://www.inf.ed.ac.uk/teaching/courses/cslp/data/songs/"+ songNum+"/" + mapNum + ".kml"
         val kmldownloader = DownloadKml(this,this)
-        kmldownloader.execute(URL)
+        kmldownloader.execute(URL).get()
 
         Log.d("SongNum", songNum)
         Log.d("MapNum",mapNum)
+
+
+
 
         //get the song title
         val songsList = DownloadXML(this)
         songsList.execute("http://www.inf.ed.ac.uk/teaching/courses/cslp/data/songs/songs.xml").get()
         val theSongsList = songsList.getSoList()
+
+
+
+
 
         for(i in theSongsList){
             if(i.num == songNum){
@@ -239,6 +253,8 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback,
         pointsText.text = points
 
 
+        collectedWordsTB.setText(lyrics)
+        collectedWordsSV.visibility = View.INVISIBLE
         guessText.setText(title)
         guessText.setOnKeyListener(View.OnKeyListener { v, keyCode, event ->
             if (keyCode == KeyEvent.KEYCODE_ENTER) {
@@ -285,19 +301,26 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback,
         }
 
         viewWordsB.setOnClickListener { view ->
-            val intent = Intent(this, CollectedWords::class.java)
-            startActivity(intent)
+            //val intent = Intent(this, CollectedWords::class.java)
+            //startActivity(intent)
+            if(collectedWordsSV.visibility == View.VISIBLE) {
+                collectedWordsSV.visibility = View.INVISIBLE
+            }else{
+                collectedWordsSV.visibility = View.VISIBLE
+            }
         }
 
         autoCompleteB.setOnClickListener { view ->
-            val intent = Intent(this, AutoCompletePage::class.java)
-            val bundle:Bundle = Bundle()
+            if(points.toInt() > 19) {
+                val intent = Intent(this, AutoCompletePage::class.java)
+                val bundle: Bundle = Bundle()
 
-            bundle.putString("map", mapNum)
-            bundle.putString("song",songNum)
+                bundle.putString("map", mapNum)
+                bundle.putString("song", songNum)
 
-            intent.putExtras(bundle)
-            startActivity(intent)
+                intent.putExtras(bundle)
+                startActivity(intent)
+            }
         }
 
 
@@ -334,6 +357,21 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback,
         //mMap.addMarker(MarkerOptions().position(FHill).title("FHill"))
         //mMap.moveCamera(CameraUpdateFactory.newLatLng(FHill))
 
+        //kmllayer!!.addListener('click')
+        /*for(x in kmllayer!!.placemarks){
+
+        }
+
+        KmlContainer = layer.getContainers().iterator().next();
+        for(placemarks: KmlPlacemarks in kmllayer!!.placemarks)
+
+
+        kmllayer!!.map.setOnInfoWindowClickListener { KmlMarker ->
+                for(i in kmllayer!!.placemarks){
+                    if( KmlMarker == i)
+                }
+            }
+        */
 
         try {  // Visualise current position with a small blue circle
             mMap.isMyLocationEnabled = true
@@ -542,8 +580,49 @@ class GetMaxSongNumber (val caller: DownloadListener, val context: Context) : As
         }
     }
 
+}
+
+class GetSongLyrics (val caller: DownloadListener, val context: Context) : AsyncTask<String, Void, String>() {
 
 
+    val tag = "GetSongLyrics"
+    var cont = context
 
+
+    override fun doInBackground(vararg f_url: String): String?{
+        var str:String = ""
+
+        try{
+            val url = URL(f_url[0])
+            val input = BufferedReader(InputStreamReader(url.openStream()))
+
+
+            // Read all the text returned by the server
+            //while (input.readLine() != null){
+            //    str += input.readLine() + "\n"
+            //}
+
+
+            var line: String? = input.readLine()
+            while(line != null){
+                str += line
+                line = input.readLine()
+            }
+            input.close()
+
+
+        }catch(e:Exception){
+
+        }
+
+        return str
+    }
+
+
+    override fun onPostExecute(result: String?) {
+        if(result != null){
+            caller.downloadComp(result)
+        }
+    }
 
 }
