@@ -7,6 +7,7 @@ import com.google.android.gms.maps.CameraUpdateFactory
 import com.google.android.gms.maps.GoogleMap
 import com.google.android.gms.maps.OnMapReadyCallback
 import com.google.android.gms.maps.SupportMapFragment
+import com.google.android.gms.maps.GoogleMap.OnMarkerClickListener
 import com.google.android.gms.maps.model.LatLng
 import com.google.android.gms.maps.model.MarkerOptions
 
@@ -21,6 +22,8 @@ import android.content.IntentFilter
 import android.content.Intent
 import android.content.BroadcastReceiver
 import android.content.res.Resources
+import android.location.Location
+import android.location.LocationManager
 import android.net.ConnectivityManager
 //import android.webkit.DownloadListener
 import java.io.*
@@ -36,17 +39,18 @@ import android.support.design.widget.Snackbar
 import android.util.Log
 import android.view.KeyEvent
 import android.view.View
+import com.google.android.gms.maps.model.Marker
 import java.net.URLConnection
 import java.util.*
 
 class MapsActivity : AppCompatActivity(), OnMapReadyCallback,
         GoogleApiClient.ConnectionCallbacks,
         GoogleApiClient.OnConnectionFailedListener,
-        LocationListener, DownloadListener, DownloadCompleteListener {
+        LocationListener, DownloadListener, DownloadCompleteListener  {
 
-
+    //GoogleMap.OnMarkerClickListener ^^^^^
     private lateinit var mMap: GoogleMap
-    //var filename = "testMap.kml"
+
     private var receiver = NetworkReceiver()
 
     var kmllayer: KmlLayer? = null
@@ -189,7 +193,7 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback,
         }
 
 
-        val songLyrics = GetMaxSongNumber(this,this)
+        val songLyrics = GetSongLyrics(this,this)
         val lyrics = songLyrics.execute("http://www.inf.ed.ac.uk/teaching/courses/cslp/data/songs/"+ songNum+ "/lyrics.txt").get()
         //collectedWords = lyrics
 
@@ -352,26 +356,10 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback,
         kmllayer = KmlLayer(mMap, stream, this)
         kmllayer!!.addLayerToMap()
 
-        // Add a marker in Sydney and move the camera
-        //val FHill = LatLng(55.946233, -3.192473)
-        //mMap.addMarker(MarkerOptions().position(FHill).title("FHill"))
-        //mMap.moveCamera(CameraUpdateFactory.newLatLng(FHill))
 
-        //kmllayer!!.addListener('click')
-        /*for(x in kmllayer!!.placemarks){
-
-        }
-
-        KmlContainer = layer.getContainers().iterator().next();
-        for(placemarks: KmlPlacemarks in kmllayer!!.placemarks)
+        //kmllayer!!.map.setOnMarkerClickListener(this)
 
 
-        kmllayer!!.map.setOnInfoWindowClickListener { KmlMarker ->
-                for(i in kmllayer!!.placemarks){
-                    if( KmlMarker == i)
-                }
-            }
-        */
 
         try {  // Visualise current position with a small blue circle
             mMap.isMyLocationEnabled = true
@@ -382,6 +370,15 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback,
         mMap.uiSettings.isMyLocationButtonEnabled = true
     }
 
+    /*override fun setOnMarkerClick(marker: Marker):Boolean{
+        val tempLoc = Location(LocationManager.GPS_PROVIDER)
+        tempLoc.setLatitude(marker.position.latitude)
+        tempLoc.setLongitude(marker.position.longitude)
+        if(mLastLocation!!.distanceTo(tempLoc) < 25){
+
+        }
+        return false
+    }*/
     override fun onStart() {
         super.onStart()
 
@@ -551,6 +548,7 @@ class GetMaxSongNumber (val caller: DownloadListener, val context: Context) : As
     override fun doInBackground(vararg f_url: String): String?{
         var str:String = ""
 
+
         try{
             val url = URL(f_url[0])
             val input = BufferedReader(InputStreamReader(url.openStream()))
@@ -591,6 +589,7 @@ class GetSongLyrics (val caller: DownloadListener, val context: Context) : Async
 
     override fun doInBackground(vararg f_url: String): String?{
         var str:String = ""
+        val fileString = StringBuilder()
 
         try{
             val url = URL(f_url[0])
@@ -606,6 +605,7 @@ class GetSongLyrics (val caller: DownloadListener, val context: Context) : Async
             var line: String? = input.readLine()
             while(line != null){
                 str += line
+                fileString.append(line)
                 line = input.readLine()
             }
             input.close()
@@ -615,7 +615,7 @@ class GetSongLyrics (val caller: DownloadListener, val context: Context) : Async
 
         }
 
-        return str
+        return fileString.toString()
     }
 
 

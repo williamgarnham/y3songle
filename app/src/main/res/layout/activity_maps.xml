@@ -101,10 +101,10 @@
         <TextView
             android:id="@+id/collectedWordsTB"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="300dp"
             android:background="@color/colorPrimary"
-            android:lineSpacingExtra="18sp"
-            android:textSize="18sp"
+            android:lineSpacingExtra="1sp"
+            android:textSize="12sp"
             android:textStyle="bold" />
     </ScrollView>
 
