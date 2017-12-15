@@ -3,7 +3,6 @@ package s1517908com.wg.songle
 import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
 
-import com.google.android.gms.maps.CameraUpdateFactory
 import com.google.android.gms.maps.GoogleMap
 import com.google.android.gms.maps.OnMapReadyCallback
 import com.google.android.gms.maps.SupportMapFragment
@@ -19,11 +18,11 @@ import android.content.Context
 import android.content.IntentFilter
 import android.content.Intent
 import android.content.BroadcastReceiver
-import android.content.res.Resources
+
 import android.location.Location
 import android.location.LocationManager
 import android.net.ConnectivityManager
-//import android.webkit.DownloadListener
+
 import java.io.*
 import java.net.URL
 import com.google.maps.android.kml.KmlLayer
@@ -31,14 +30,14 @@ import com.google.maps.android.kml.KmlLayer
 import android.os.AsyncTask
 
 import android.widget.Toast
-import android.widget.Button
+
 import kotlinx.android.synthetic.main.activity_maps.*
-import android.support.design.widget.Snackbar
+
 import android.util.Log
 import android.view.KeyEvent
 import android.view.View
 import com.google.android.gms.maps.model.*
-import java.net.URLConnection
+
 import java.util.*
 import kotlin.collections.ArrayList
 
@@ -47,7 +46,7 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback,
         GoogleApiClient.OnConnectionFailedListener,
         LocationListener, DownloadListener, DownloadCompleteListener, OnMarkerClickListener  {
 
-    //GoogleMap.OnMarkerClickListener ^^^^^
+
     private lateinit var mMap: GoogleMap
 
     private var receiver = NetworkReceiver()
@@ -66,6 +65,7 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback,
     var collectedWords: String = ""
     var lyricsList :MutableList<MutableList<String>> = mutableListOf()
 
+    //reads points text file
     fun readTxtFile(filename: String) {
         val fis : FileInputStream= openFileInput(filename)
         val isr = InputStreamReader(fis)
@@ -76,9 +76,8 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback,
 
     }
 
+    //writes to points text file
     fun writeTxtFile() {
-        //File("pointsnum.txt").bufferedWriter().use { out -> out.write(points) }
-
         val filename = "pointsnum.txt"
         val outputStream: FileOutputStream
 
@@ -107,6 +106,7 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback,
 
     }
 
+    //reads completed songs file
     fun readCompFile(difficulty: Int):ArrayList<Int>{
         val fileName :String = this.getFilesDir().getAbsolutePath() + "/" + "completedSongsFile"+difficulty.toString()+".txt"
         Log.d("MAPSCFILE",fileName)
@@ -121,6 +121,7 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback,
         return songsArray
     }
 
+    //starts corrected guess activity
     fun openCorrAct(song:String,map:String){
         val intentComp = Intent(this, CorrectGuess::class.java)
         intentComp.addFlags(Intent.FLAG_ACTIVITY_NO_HISTORY)
@@ -488,7 +489,7 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback,
             ${current.longitude})"""
             )
             // Do something with current location
-
+            mLastLocation = current
         }
     }
 
