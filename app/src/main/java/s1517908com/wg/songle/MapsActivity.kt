@@ -8,8 +8,6 @@ import com.google.android.gms.maps.GoogleMap
 import com.google.android.gms.maps.OnMapReadyCallback
 import com.google.android.gms.maps.SupportMapFragment
 import com.google.android.gms.maps.GoogleMap.OnMarkerClickListener
-import com.google.android.gms.maps.model.LatLng
-import com.google.android.gms.maps.model.MarkerOptions
 
 import com.google.android.gms.common.ConnectionResult
 import com.google.android.gms.common.api.GoogleApiClient
@@ -39,7 +37,7 @@ import android.support.design.widget.Snackbar
 import android.util.Log
 import android.view.KeyEvent
 import android.view.View
-import com.google.android.gms.maps.model.Marker
+import com.google.android.gms.maps.model.*
 import java.net.URLConnection
 import java.util.*
 import kotlin.collections.ArrayList
@@ -47,7 +45,7 @@ import kotlin.collections.ArrayList
 class MapsActivity : AppCompatActivity(), OnMapReadyCallback,
         GoogleApiClient.ConnectionCallbacks,
         GoogleApiClient.OnConnectionFailedListener,
-        LocationListener, DownloadListener, DownloadCompleteListener  {
+        LocationListener, DownloadListener, DownloadCompleteListener, OnMarkerClickListener  {
 
     //GoogleMap.OnMarkerClickListener ^^^^^
     private lateinit var mMap: GoogleMap
@@ -66,7 +64,7 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback,
     var points :String = ""
     var title :String = ""
     var collectedWords: String = ""
-    var lyricsList :List<List<String>> = emptyList()
+    var lyricsList :MutableList<MutableList<String>> = mutableListOf()
 
     fun readTxtFile(filename: String) {
         val fis : FileInputStream= openFileInput(filename)
@@ -201,11 +199,14 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback,
 
         val linesList: List<String> = lyrics.split("\n".toRegex())
         var words : List<String>
+
         for(x in linesList){
-            words = x.split("\\p{Punct}+".toRegex())
-            lyricsList.plus(words)
+            words = x.split("[\\p{Punct}+ | \\s]".toRegex())
+            lyricsList!!.add(words.toMutableList())
 
         }
+
+
 
 
         //load the KMLlayer
@@ -267,10 +268,7 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback,
 
         pointsText.text = points
 
-        ////////////////delete me////////////////
-        collectedWordsTB.setText(lyrics)
-        guessText.setText(title)
-        ////////////////delete me////////////////
+
 
         //set visibility of collected words
         collectedWordsSV.visibility = View.INVISIBLE
@@ -318,6 +316,15 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback,
                 points = Integer.toString(points.toInt() - 2)
                 pointsText.text = points
                 writeTxtFile()
+
+                var fwL = rand.nextInt(lyricsList.size)
+                var fwW = rand.nextInt(lyricsList.get(fwL).size )
+                var word:String = lyricsList.get(fwL).get(fwW) + "\n"
+                Log.d("THEFWORD",word)
+                collectedWords += word
+                collectedWordsTB.setText(collectedWords)
+                Toast.makeText(this, word,
+                        Toast.LENGTH_SHORT).show()
             }
         }
 
@@ -377,7 +384,7 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback,
         kmllayer!!.addLayerToMap()
 
 
-        //kmllayer!!.map.setOnMarkerClickListener(this)
+        kmllayer!!.map.setOnMarkerClickListener(this)
 
 
 
@@ -391,28 +398,29 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback,
     }
 
     //marker click listener
-    /*override fun setOnMarkerClick(marker: Marker):Boolean{
+    override fun onMarkerClick(marker: Marker):Boolean{
         val tempLoc = Location(LocationManager.GPS_PROVIDER)
         tempLoc.setLatitude(marker.position.latitude)
         tempLoc.setLongitude(marker.position.longitude)
-        if(mLastLocation!!.distanceTo(tempLoc) < 25){
-            var wordNums = marker.title.toString
+        if(mLastLocation!!.distanceTo(tempLoc) < 30){
+            marker.isVisible = false
+            var wordNums = marker.title.toString()
             var line = 0
             var pos = 0
             for(char in wordNums){
-                if(char == ":"){
+                if(char == ':'){
                     line = wordNums.substring(0,wordNums.indexOf(':')).toInt()
-                    position = wordNums.substring(wordNums.indexOf(':')+1, wordNums.length).toInt()
+                    pos = wordNums.substring(wordNums.indexOf(':')+1, wordNums.length).toInt()
                 }
             }
             var str = lyricsList.get(line -1).get(pos-1)
             Toast.makeText(this, str,
-                            Toast.LENGTH_LONG).show()
+                            Toast.LENGTH_SHORT).show()
             collectedWords += str +"\n"
             collectedWordsTB.setText(collectedWords)
             //add word to collected words and set text box to equal it
             //do points (plus one point)
-            points = Integer.toString(points.toInt() - 2)
+            points = Integer.toString(points.toInt() + 1)
             pointsText.text = points
             writeTxtFile()
 
@@ -420,7 +428,7 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback,
 
         }
         return false
-    }*/
+    }
     override fun onStart() {
         super.onStart()
 
