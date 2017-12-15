@@ -9,7 +9,6 @@ import android.view.View
 
 import kotlinx.android.synthetic.main.activity_completed_songs.*
 import kotlinx.android.synthetic.main.content_completed_songs.*
-//import jdk.nashorn.internal.runtime.ScriptingFunctions.readLine
 import java.io.*
 
 
@@ -38,16 +37,13 @@ class CompletedSongs : AppCompatActivity(), DownloadCompleteListener {
         setContentView(R.layout.activity_completed_songs)
         setSupportActionBar(toolbar)
 
+        //clear completed songs text files
         clearSongsB.setOnClickListener { view ->
             clearCompletedTxtFile()
         }
 
-        //var easy: ArrayList<Song>? = null
-        //var inter: ArrayList<Song>? = null
-        //var hard: ArrayList<Song>? = null
-        //var expert: ArrayList<Song>? = null
-        //var legend: ArrayList<Song>? = null
 
+        //create lists to hold the songs for each difficulty
         var easy = arrayListOf<Song>()
         var inter = arrayListOf<Song>()
         var hard = arrayListOf<Song>()
@@ -55,7 +51,7 @@ class CompletedSongs : AppCompatActivity(), DownloadCompleteListener {
         var legend = arrayListOf<Song>()
 
 
-
+        //download the xml of the songs
         val songs = DownloadXML(this)
         songs.execute("http://www.inf.ed.ac.uk/teaching/courses/cslp/data/songs/songs.xml").get()
 
@@ -63,7 +59,7 @@ class CompletedSongs : AppCompatActivity(), DownloadCompleteListener {
         val number :Int = theSongs.size
         Log.d("ListSize", number.toString())
 
-        Log.d("CHECK", "CHECK")
+        //loop through each list and check if the song is in the list
         for(y in 1..5){
             val fileName :String = this.getFilesDir().getAbsolutePath() + "/" + "completedSongsFile"+y.toString()+".txt"
             //val cFile : File = File(fileName)
@@ -113,6 +109,8 @@ class CompletedSongs : AppCompatActivity(), DownloadCompleteListener {
          }
         }
 
+
+        //print out the information for each song
         var largeString: String = ""
 
 
@@ -137,10 +135,10 @@ class CompletedSongs : AppCompatActivity(), DownloadCompleteListener {
         }
 
 
-        Log.d("Songs",largeString)
+
         songsText.text = largeString
         songsText.visibility = View.VISIBLE
-        Log.d("CHECK","CHECK")
+
 
     }
 

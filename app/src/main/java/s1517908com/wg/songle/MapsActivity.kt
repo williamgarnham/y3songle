@@ -42,6 +42,7 @@ import android.view.View
 import com.google.android.gms.maps.model.Marker
 import java.net.URLConnection
 import java.util.*
+import kotlin.collections.ArrayList
 
 class MapsActivity : AppCompatActivity(), OnMapReadyCallback,
         GoogleApiClient.ConnectionCallbacks,
@@ -65,6 +66,7 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback,
     var points :String = ""
     var title :String = ""
     var collectedWords: String = ""
+    var lyricsList :List<List<String>> = emptyList()
 
     fun readTxtFile(filename: String) {
         val fis : FileInputStream= openFileInput(filename)
@@ -136,7 +138,7 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback,
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
-        val intent = intent
+        //val intent = intent
 
         //figure out what song to play based on difficulty
         val bundle:Bundle = getIntent().getExtras()
@@ -155,18 +157,19 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback,
             diff = 5
         }
 
-
+        //get songs completed by user
         val songsArray = readCompFile(diff)
         Log.d("PLAYEDSONGSMAP",songsArray.toString())
 
         //choose song by checking how many songs are, then comparing to songsArray and randomly generating
-        //val maxSong = getSongNumbers()
+
+        //get the maximum song number
         val maxSong = GetMaxSongNumber(this,this)
         val mS = maxSong.execute("http://www.inf.ed.ac.uk/teaching/courses/cslp/data/songs/songs.txt").get()
 
 
 
-
+        //find an unplayed song
         val rand: Random = Random()
         var randNum = 0
 
@@ -192,13 +195,20 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback,
             songNum = "0"+randNum.toString()
         }
 
-
+        //load the lyrics
         val songLyrics = GetSongLyrics(this,this)
         val lyrics = songLyrics.execute("http://www.inf.ed.ac.uk/teaching/courses/cslp/data/songs/"+ songNum+ "/lyrics.txt").get()
-        //collectedWords = lyrics
 
-        Log.d("Lyrics",lyrics)
+        val linesList: List<String> = lyrics.split("\n".toRegex())
+        var words : List<String>
+        for(x in linesList){
+            words = x.split("\\p{Punct}+".toRegex())
+            lyricsList.plus(words)
 
+        }
+
+
+        //load the KMLlayer
         val URL = "http://www.inf.ed.ac.uk/teaching/courses/cslp/data/songs/"+ songNum+"/" + mapNum + ".kml"
         val kmldownloader = DownloadKml(this,this)
         kmldownloader.execute(URL).get()
@@ -243,6 +253,7 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback,
         val filter = IntentFilter(ConnectivityManager.CONNECTIVITY_ACTION)
         registerReceiver(receiver, filter)
 
+        //check to see if there is a pointsnum.txt in the users directory
         val path :String = this.getFilesDir().getAbsolutePath() + "/" + "pointsnum.txt"
         val pointsFile : File = File(path)
         val pointsFileExists : Boolean? = pointsFile.exists()
@@ -256,10 +267,15 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback,
 
         pointsText.text = points
 
-
+        ////////////////delete me////////////////
         collectedWordsTB.setText(lyrics)
-        collectedWordsSV.visibility = View.INVISIBLE
         guessText.setText(title)
+        ////////////////delete me////////////////
+
+        //set visibility of collected words
+        collectedWordsSV.visibility = View.INVISIBLE
+
+        //have the guessText box listen for the enter key being hit
         guessText.setOnKeyListener(View.OnKeyListener { v, keyCode, event ->
             if (keyCode == KeyEvent.KEYCODE_ENTER) {
                 if(guessText.text.toString().toLowerCase() == title.toLowerCase()){
@@ -282,7 +298,7 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback,
             false
         })
 
-
+        //guess song button visibility
         guessText.visibility = View.INVISIBLE
         guessSongButton.setOnClickListener { view ->
 
@@ -294,6 +310,7 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback,
 
         }
 
+        //get free word
         freeWordB.setOnClickListener { view ->
             //get free word
             //subtract points
@@ -304,9 +321,9 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback,
             }
         }
 
+
+        //set visibility for viewing words
         viewWordsB.setOnClickListener { view ->
-            //val intent = Intent(this, CollectedWords::class.java)
-            //startActivity(intent)
             if(collectedWordsSV.visibility == View.VISIBLE) {
                 collectedWordsSV.visibility = View.INVISIBLE
             }else{
@@ -314,6 +331,7 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback,
             }
         }
 
+        //autocomplete button
         autoCompleteB.setOnClickListener { view ->
             if(points.toInt() > 19) {
                 val intent = Intent(this, AutoCompletePage::class.java)
@@ -330,6 +348,7 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback,
 
     }
 
+    //stop anything from happening on back pressed
     override fun onBackPressed() {
         //prevent back button working
     }
@@ -353,6 +372,7 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback,
     override fun onMapReady(googleMap: GoogleMap) {
         mMap = googleMap
 
+        //create kml layer
         kmllayer = KmlLayer(mMap, stream, this)
         kmllayer!!.addLayerToMap()
 
@@ -370,11 +390,33 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback,
         mMap.uiSettings.isMyLocationButtonEnabled = true
     }
 
+    //marker click listener
     /*override fun setOnMarkerClick(marker: Marker):Boolean{
         val tempLoc = Location(LocationManager.GPS_PROVIDER)
         tempLoc.setLatitude(marker.position.latitude)
         tempLoc.setLongitude(marker.position.longitude)
         if(mLastLocation!!.distanceTo(tempLoc) < 25){
+            var wordNums = marker.title.toString
+            var line = 0
+            var pos = 0
+            for(char in wordNums){
+                if(char == ":"){
+                    line = wordNums.substring(0,wordNums.indexOf(':')).toInt()
+                    position = wordNums.substring(wordNums.indexOf(':')+1, wordNums.length).toInt()
+                }
+            }
+            var str = lyricsList.get(line -1).get(pos-1)
+            Toast.makeText(this, str,
+                            Toast.LENGTH_LONG).show()
+            collectedWords += str +"\n"
+            collectedWordsTB.setText(collectedWords)
+            //add word to collected words and set text box to equal it
+            //do points (plus one point)
+            points = Integer.toString(points.toInt() - 2)
+            pointsText.text = points
+            writeTxtFile()
+
+
 
         }
         return false
@@ -471,9 +513,6 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback,
 
     }
 
-
-
-
 }
 
 interface DownloadListener {
@@ -482,16 +521,8 @@ interface DownloadListener {
 }
 
 
+
 class DownloadKml (val caller: DownloadListener, val context: Context) : AsyncTask<String, Void, String>() {
-
-
-    val tag = "DownloadKml"
-    var cont = context
-    //var sng = song
-    //var mp = map
-    //var filename = "Song ${sng}, map ${mp}"
-
-    //var file = File(cont.getFilesDir(), filename)
 
     override fun doInBackground(vararg f_url: String): String?{
         val fileString = StringBuilder()
@@ -512,15 +543,6 @@ class DownloadKml (val caller: DownloadListener, val context: Context) : AsyncTa
 
         }
 
-        val outputStream : FileOutputStream
-
-        try{
-            //outputStream = cont.openFileOutput(filename, Context.MODE_PRIVATE)
-            //outputStream.write(fileString.toString().toByteArray())
-            //outputStream.close()
-        }catch(e:Exception){
-
-        }
         return fileString.toString()
     }
 
@@ -531,19 +553,10 @@ class DownloadKml (val caller: DownloadListener, val context: Context) : AsyncTa
         }
     }
 
-
-
-
-
 }
 
 
 class GetMaxSongNumber (val caller: DownloadListener, val context: Context) : AsyncTask<String, Void, String>() {
-
-
-    val tag = "GetMaxSongNumber"
-    var cont = context
-
 
     override fun doInBackground(vararg f_url: String): String?{
         var str:String = ""
@@ -582,11 +595,6 @@ class GetMaxSongNumber (val caller: DownloadListener, val context: Context) : As
 
 class GetSongLyrics (val caller: DownloadListener, val context: Context) : AsyncTask<String, Void, String>() {
 
-
-    val tag = "GetSongLyrics"
-    var cont = context
-
-
     override fun doInBackground(vararg f_url: String): String?{
         var str:String = ""
         val fileString = StringBuilder()
@@ -595,17 +603,10 @@ class GetSongLyrics (val caller: DownloadListener, val context: Context) : Async
             val url = URL(f_url[0])
             val input = BufferedReader(InputStreamReader(url.openStream()))
 
-
-            // Read all the text returned by the server
-            //while (input.readLine() != null){
-            //    str += input.readLine() + "\n"
-            //}
-
-
             var line: String? = input.readLine()
             while(line != null){
                 str += line
-                fileString.append(line)
+                fileString.append(line + "\n")
                 line = input.readLine()
             }
             input.close()

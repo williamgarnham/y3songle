@@ -20,13 +20,14 @@ class CorrectGuess : AppCompatActivity() {
         setContentView(R.layout.activity_correct_guess)
         setSupportActionBar(toolbar)
 
+        //unbundle the information about the song and difficulty
         val bundle:Bundle = getIntent().getExtras()
         var mapNum:String = bundle.getString("map")
         var songNum:String = bundle.getString("song")
 
         writeToComplFile(songNum,mapNum)
 
-
+        //button to go to main activity
         contB.setOnClickListener{ view ->
             val intent = Intent(this, MainActivity::class.java)
             intent.addFlags(Intent.FLAG_ACTIVITY_NO_HISTORY)
@@ -34,6 +35,7 @@ class CorrectGuess : AppCompatActivity() {
         }
     }
 
+    //write the new song to the relevant file
     fun writeToComplFile(song:String,map:String){
 
         val filename = this.getFilesDir().getAbsolutePath() + "/" +"completedSongsFile" + map.removePrefix("map")+ ".txt"

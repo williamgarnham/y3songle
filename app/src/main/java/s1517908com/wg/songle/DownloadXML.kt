@@ -10,10 +10,6 @@ import java.io.InputStream
 import java.net.URL
 import java.net.HttpURLConnection
 
-/**
- * Created by Buggs on 09/11/2017.
- */
-
 data class Song(val num: String, val artist: String, val title: String, val link: String)
 
 

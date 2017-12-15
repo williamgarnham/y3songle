@@ -15,6 +15,8 @@ import java.io.FileOutputStream
 
 class MainActivity : AppCompatActivity() {
 
+
+    //create the completed songs text files
     fun createCompletedTxtFile(){
         val filename = "completedSongsFile"
         var emptystring = ""
@@ -41,6 +43,7 @@ class MainActivity : AppCompatActivity() {
         setContentView(R.layout.activity_main)
         setSupportActionBar(toolbar)
 
+        //check if the complatedTxt files exist, if they don't, make them
         val path :String = this.getFilesDir().getAbsolutePath() + "/" + "completedSongsFile1.txt";
         val completedFile : File = File(path)
         val completedFileExists : Boolean? = completedFile.exists()
@@ -52,6 +55,7 @@ class MainActivity : AppCompatActivity() {
         }
 
 
+        //set up buttons (some with bundles to pass information from one activity to another)
         helpB.setOnClickListener { view ->
             val intent = Intent(this, HelpPage::class.java)
             startActivity(intent)
